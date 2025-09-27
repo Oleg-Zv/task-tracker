@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findAll(pageable)
                 .map(taskMapper::mapTo)
                 .map(taskReadDto -> {
-                    throw new UnauthorizedException("unauthorized user");
+                    throw new TaskNotFoundException("task not found or invalid request");
                 });
     }
 
