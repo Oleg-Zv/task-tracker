@@ -36,14 +36,13 @@ public class JwtUtils{
     }
 
 
-    //обаботать эксепшион
     public boolean checkToken(String token){
-        try {
-             jwtDecoder.decode(token);
-                   return true;
-        }catch (JwtException e){
-            return false;
-        }
+       try {
+           jwtDecoder.decode(token);
+           return true;
+       }catch (JwtException e){
+           throw new JwtException("token is invalid or expired");
+       }
     }
 
     public String getUsername(String token){

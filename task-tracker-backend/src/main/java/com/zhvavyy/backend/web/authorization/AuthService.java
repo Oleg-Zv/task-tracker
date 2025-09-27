@@ -14,7 +14,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,7 +61,6 @@ public class AuthService implements UserDetailsService {
     }
 
 
-    //валидация!
     public JwtResponse login(LoginRequest loginRequest,
                              AuthenticationManager authenticationManager){
 
@@ -77,7 +75,7 @@ public class AuthService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  {
        return userRepository.findByEmail(username)
                 .map(CustomUserDetails::new)
                 .orElseThrow(()-> new UsernameNotFoundException("user not found with email: " + username));

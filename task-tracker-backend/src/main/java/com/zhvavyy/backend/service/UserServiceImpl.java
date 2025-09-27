@@ -5,7 +5,7 @@ import com.zhvavyy.backend.dto.UserCreateDto;
 import com.zhvavyy.backend.dto.UserFilterDto;
 import com.zhvavyy.backend.dto.UserReadDto;
 import com.zhvavyy.backend.exception.UnauthorizedException;
-import com.zhvavyy.backend.exception.UserNotFoundException;
+import com.zhvavyy.backend.exception.UserNotFoundCustomException;
 import com.zhvavyy.backend.filter.UserSpecification;
 import com.zhvavyy.backend.mapper.CurrentUserMapper;
 import com.zhvavyy.backend.mapper.UserCreateMapper;
@@ -80,13 +80,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         if(!userRepository.existsById(id)){
-            throw new UserNotFoundException("user not fount with id: "+id);
+            throw new UserNotFoundCustomException("user not fount with id: "+id);
         }
         userRepository.deleteById(id);
     }
 
     private <T> T getOrThrow(Optional<T> user, String message){
         return user.orElseThrow(()->
-                new UserNotFoundException(message));
+                new UserNotFoundCustomException(message));
     }
 }
