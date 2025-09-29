@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/db.changelog-29-09-2025-create-tables.sql
+  - include:
+      file: db/changelog/db.changelog-29-09-2025-insert.sql

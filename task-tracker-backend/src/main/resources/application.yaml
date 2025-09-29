@@ -10,7 +10,14 @@ spring:
         show_sql: true
         format_sql: true
 
-        #ИСПРАВИТЬ на хранение в сикрет докер
+  datasource:
+    username: ${db_user}
+    password: ${db_password}
+    url: ${db_url}
+    driver-class-name: org.postgresql.Driver
+  #ИСПРАВИТЬ на хранение в сикрет докер
+
+
 jwt:
   private-key: ${JWT_PRIVATE_KEY_PATH}
   public-key: ${JWT_PUBLIC_KEY_PATH}

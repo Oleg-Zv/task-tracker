@@ -20,7 +20,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -34,7 +34,7 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-
     private Instant createdAt;
+
     private Instant doneAt;
 }
