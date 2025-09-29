@@ -14,5 +14,4 @@ public interface TaskService {
     Page<TaskReadDto> findAllByUserId(Long id,Pageable pageable);
     Page<TaskReadDto> getAllPending(Pageable pageable);
     Page<TaskReadDto> getAllDone(Pageable pageable);
-    Page<TaskReadDto> getAllActive(Pageable pageable);
 }
