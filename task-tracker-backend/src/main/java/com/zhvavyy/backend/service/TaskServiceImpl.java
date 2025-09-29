@@ -74,10 +74,6 @@ public class TaskServiceImpl implements TaskService {
       return filterByStatus(Status.DONE,pageable);
     }
 
-    @Override
-    public Page<TaskReadDto> getAllActive(Pageable pageable) {
-        return filterByStatus(Status.ACTIVE,pageable);
-    }
 
     private Page<TaskReadDto> filterByStatus(Status status, Pageable pageable) {
 
