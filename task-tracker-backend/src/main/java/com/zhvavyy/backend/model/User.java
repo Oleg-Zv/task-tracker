@@ -29,17 +29,17 @@ public class User{
     @Column(unique = true,length = 50, nullable = false)
     private String email;
 
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String firstname;
 
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String lastname;
 
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private Role role;
 
     @Builder.Default
