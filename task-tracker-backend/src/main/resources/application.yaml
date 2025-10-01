@@ -26,4 +26,3 @@ logging:
     org.springframework.security.web.FilterChainProxy: TRACE
     org.springframework.security.web.access.ExceptionTranslationFilter: TRACE
     org.springframework.security.web.access.intercept.FilterSecurityInterceptor: TRACE
-
