@@ -5,10 +5,12 @@ import com.zhvavyy.backend.web.security.details.CustomUserDetails;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -25,9 +27,12 @@ public class JwtUtils{
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                .subject(userDetails.getUsername())
-               .claim("authorities", userDetails.getAuthorities())
-               .issuedAt(Instant.now())
-               .expiresAt(Instant.now().plus(15, ChronoUnit.MINUTES))
+               .claim("authorities", userDetails.getAuthorities()
+                       .stream()
+                       .map(GrantedAuthority::getAuthority)
+                       .collect(Collectors.toList()))
+               .issuedAt(Instant.ofEpochSecond(Instant.now().getEpochSecond()))
+               .expiresAt(Instant.ofEpochSecond(Instant.now().plus(15, ChronoUnit.MINUTES).getEpochSecond()))
                .build();
 
         Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims));

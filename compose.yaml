@@ -11,12 +11,23 @@ services:
       - db_name
     ports:
      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 
   task-tracker-backend:
-    image: olegzv13/task-tracker-backend:v6
+    image: olegzv13/backend:latest
     ports:
       - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      default:
+        aliases:
+          - backend
     secrets:
       - db_user
       - db_password
@@ -24,7 +35,9 @@ services:
       - jwt_private_key
       - jwt_public_key
     entrypoint:  ["/entrypoint.sh"]
-
+networks:
+    default:
+      driver: overlay
 
 secrets:
   db_user:
