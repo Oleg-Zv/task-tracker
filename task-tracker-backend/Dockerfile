@@ -1,19 +1,23 @@
-FROM amazoncorretto:17-jdk AS build
+
+FROM  amazoncorretto:17 AS build
 WORKDIR /app
 
-COPY build.gradle settings.gradle gradlew gradlew.bat gradle/ ./
+COPY . .
+RUN chmod +x ./gradlew
 RUN ./gradlew dependencies --no-daemon
 
-RUN chmod +x ./gradlew
 COPY src ./src
-RUN ./gradlew clean build -x test --no-deamon
+RUN ./gradlew clean build -x test --no-daemon
 
 
-FROM amazoncorretto:17-jre
+FROM amazoncorretto:17-alpine
 WORKDIR /app
 
 ARG jar_file=build/libs/*.jar
 COPY --from=build /app/${jar_file} app.jar
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["/entrypoint.sh"]
