@@ -11,13 +11,12 @@ spring:
         format_sql: true
 
   datasource:
-    username: ${db_user}
-    password: ${db_password}
-    url: ${db_url}
-    driver-class-name: org.postgresql.Driver
-  #ИСПРАВИТЬ на хранение в сикрет докер
+      url: ${SPRING_DATASOURCE_URL}
+      username: ${SPRING_DATASOURCE_USERNAME}
+      password: ${SPRING_DATASOURCE_PASSWORD}
+      driver-class-name: org.postgresql.Driver
 
 
 jwt:
-  private-key: ${JWT_PRIVATE_KEY_PATH}
-  public-key: ${JWT_PUBLIC_KEY_PATH}
+    private-key: ${SPRING_JWT_PRIVATE_KEY}
+    public-key: ${SPRING_JWT_PUBLIC_KEY}
