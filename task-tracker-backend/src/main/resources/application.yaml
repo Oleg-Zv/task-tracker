@@ -15,8 +15,15 @@ spring:
       username: ${SPRING_DATASOURCE_USERNAME}
       password: ${SPRING_DATASOURCE_PASSWORD}
       driver-class-name: org.postgresql.Driver
-
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
 jwt:
     private-key: ${SPRING_JWT_PRIVATE_KEY}
     public-key: ${SPRING_JWT_PUBLIC_KEY}
+logging:
+  level:
+    org.springframework.security.web.FilterChainProxy: TRACE
+    org.springframework.security.web.access.ExceptionTranslationFilter: TRACE
+    org.springframework.security.web.access.intercept.FilterSecurityInterceptor: TRACE
+
