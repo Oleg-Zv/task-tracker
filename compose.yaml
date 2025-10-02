@@ -19,7 +19,7 @@ services:
 
 
   task-tracker-backend:
-    image: olegzv13/backend:latest
+    image: olegzv13/backend:20
     ports:
       - "8080:8080"
     depends_on:
