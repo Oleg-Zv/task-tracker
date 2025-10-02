@@ -26,7 +26,6 @@ public class EmailSenderImpl implements EmailSender {
            message.setSubject(data.getSubject());
 
            mailSender.send(message);
-
            return "Mail sent successfully.";
 
        }catch (Exception ex){
