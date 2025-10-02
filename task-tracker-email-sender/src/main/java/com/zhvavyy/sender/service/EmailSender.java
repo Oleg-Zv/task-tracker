@@ -4,14 +4,14 @@ import com.zhvavyy.sender.dto.DataForSendEmail;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class EmailSender {
 
-    private final JavaMailSender mailSender;
+    //private final JavaMailSenderImpl mailSender;
 
     String from = "argumentoleg@gmail.com";
     String to = "argumentoleg@gmail.com";
@@ -23,7 +23,7 @@ public class EmailSender {
         message.setSubject("This is a test email");
         message.setText("Hi - i'm is Oleg, and you?)");
 
-        mailSender.send(message);
+      //  mailSender.send(message);
     }
 
 }
