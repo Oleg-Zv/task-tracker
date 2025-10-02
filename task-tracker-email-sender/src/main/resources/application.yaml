@@ -1,0 +1,6 @@
+spring:
+  mail:
+    username: #жду
+    password: #жду
+    host: #жду
+    port: #жду
