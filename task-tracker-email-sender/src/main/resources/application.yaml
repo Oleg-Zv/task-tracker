@@ -1,9 +1,9 @@
 spring:
   mail:
-    username: #жду
-    password: #жду
-    host: #жду
-    port: #жду
+    username: argumentoleg@gmail.com
+    password: ${SPRING_MAIL_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
     properties:
       smtp:
         auth: true

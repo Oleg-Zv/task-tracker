@@ -18,6 +18,13 @@ services:
       retries: 5
 
 
+  task-tracker-email-sender:
+    image: olegzv13/email-sender
+    secrets:
+      - gmail_password
+    entrypoint: ["/entrypoint.sh"]
+
+
   task-tracker-backend:
     image: olegzv13/backend:20
     ports:
@@ -34,10 +41,11 @@ services:
       - db_name
       - jwt_private_key
       - jwt_public_key
-    entrypoint:  ["/entrypoint.sh"]
+    entrypoint: [ "/entrypoint.sh" ]
+
 networks:
-    default:
-      driver: overlay
+  default:
+    driver: overlay
 
 secrets:
   db_user:
@@ -49,6 +57,8 @@ secrets:
   jwt_private_key:
     external: true
   jwt_public_key:
+    external: true
+  gmail_password:
     external: true
 
 
