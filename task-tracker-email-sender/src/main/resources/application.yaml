@@ -4,3 +4,8 @@ spring:
     password: #жду
     host: #жду
     port: #жду
+    properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true

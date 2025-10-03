@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailSenderImpl implements EmailSender {
 
-    @Value("${username}")
+    @Value("${spring.mail.username}")
     String sender;
     private final JavaMailSender mailSender;
 
@@ -22,8 +22,8 @@ public class EmailSenderImpl implements EmailSender {
            SimpleMailMessage message = new SimpleMailMessage();
            message.setFrom(sender);
            message.setTo(data.getRecipient());
-           message.setText(data.getMsgBody());
            message.setSubject(data.getSubject());
+           message.setText(data.getMsgBody());
 
            mailSender.send(message);
            return "Mail sent successfully.";
