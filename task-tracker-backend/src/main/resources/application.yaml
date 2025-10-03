@@ -18,6 +18,13 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+
 jwt:
     private-key: ${SPRING_JWT_PRIVATE_KEY}
     public-key: ${SPRING_JWT_PUBLIC_KEY}
@@ -26,3 +33,4 @@ logging:
     org.springframework.security.web.FilterChainProxy: TRACE
     org.springframework.security.web.access.ExceptionTranslationFilter: TRACE
     org.springframework.security.web.access.intercept.FilterSecurityInterceptor: TRACE
+
