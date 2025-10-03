@@ -1,5 +1,7 @@
 package com.zhvavyy.backend.web.authorization;
 
+import com.zhvavyy.backend.messaging.producer.RegisterProducer;
+import com.zhvavyy.backend.messaging.producer.dto.DataForSendEmail;
 import com.zhvavyy.backend.model.User;
 import com.zhvavyy.backend.model.enums.Role;
 import com.zhvavyy.backend.repository.UserRepository;
@@ -32,6 +34,7 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class AuthService {
 
+    RegisterProducer producer;
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     JwtUtils jwtUtils;
@@ -60,6 +63,15 @@ public class AuthService {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        DataForSendEmail data= DataForSendEmail.builder()
+                .recipient(registerRequest.getEmail())
+                .subject("Successful registration in Task Tracker")
+                .msgBody("Hello " + registerRequest.getFirstname() +" !\n"+
+                        "Your account has been registered.\n"+
+                        "Good luck!")
+                .build();
+        producer.sendMessage(data);
 
         return new JwtResponse(token);
     }
