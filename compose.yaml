@@ -17,9 +17,11 @@ services:
       timeout: 5s
       retries: 5
 
-
   task-tracker-email-sender:
     image: olegzv13/email-sender
+    depends_on:
+      - kafka
+      - task-tracker-backend
     secrets:
       - gmail_password
     entrypoint: ["/entrypoint.sh"]
@@ -31,6 +33,8 @@ services:
       - "8080:8080"
     depends_on:
       - database
+      - kafka
+      - task-tracker-email-sender
     networks:
       default:
         aliases:
@@ -43,9 +47,39 @@ services:
       - jwt_public_key
     entrypoint: [ "/entrypoint.sh" ]
 
+  kafka:
+    image: apache/kafka:4.0.0
+    ports:
+      - "9092:9092"
+    hostname: kafka
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_BROKER_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
+      - KAFKA_KRAFT_CLUSTER_ID_FILE=/run/secrets/kafka_cluster_id
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_LOG_RETENTION_HOURS=100
+      - KAFKA_NUM_PARTITIONS=4
+      - KAFKA_DELETE_TOPIC_ENABLE=true
+      - ALLOW_PLAINTEXT_LISTENER=yes #заменить
+    volumes:
+      - kafka-data:/tmp/kraft-combined-logs
+    secrets:
+      - kafka_cluster_id
+
+
 networks:
   default:
     driver: overlay
+
+volumes:
+  kafka-data: {}
 
 secrets:
   db_user:
@@ -59,6 +93,8 @@ secrets:
   jwt_public_key:
     external: true
   gmail_password:
+    external: true
+  kafka_cluster_id:
     external: true
 
 
