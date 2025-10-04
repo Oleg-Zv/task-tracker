@@ -5,7 +5,6 @@ import com.zhvavyy.sender.service.EmailSenderImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 
-@KafkaListener
 @RequiredArgsConstructor
 public class EmailConsumer {
 
