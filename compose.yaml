@@ -16,29 +16,31 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      default:
+        aliases:
+          - database
 
   task-tracker-email-sender:
-    image: olegzv13/email-sender
+    image: olegzv13/email-sender:v18
     depends_on:
       - kafka
-      - task-tracker-backend
     secrets:
       - gmail_password
     entrypoint: ["/entrypoint.sh"]
+    networks:
+      - default
 
 
   task-tracker-backend:
-    image: olegzv13/backend:20
+    image: olegzv13/backend:v21
     ports:
       - "8080:8080"
     depends_on:
       - database
       - kafka
-      - task-tracker-email-sender
     networks:
-      default:
-        aliases:
-          - backend
+      - default
     secrets:
       - db_user
       - db_password
@@ -52,6 +54,7 @@ services:
     ports:
       - "9092:9092"
     hostname: kafka
+    user: "1000:1000"
     environment:
       - KAFKA_ENABLE_KRAFT=yes
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
@@ -61,7 +64,7 @@ services:
       - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
+      - KAFKA_LOG_DIRS=/var/lib/kafka/data
       - KAFKA_KRAFT_CLUSTER_ID_FILE=/run/secrets/kafka_cluster_id
       - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
       - KAFKA_LOG_RETENTION_HOURS=100
@@ -69,9 +72,11 @@ services:
       - KAFKA_DELETE_TOPIC_ENABLE=true
       - ALLOW_PLAINTEXT_LISTENER=yes #заменить
     volumes:
-      - kafka-data:/tmp/kraft-combined-logs
+      - kafka-data:/var/lib/kafka/data
     secrets:
       - kafka_cluster_id
+    networks:
+      - default
 
 
 networks:
