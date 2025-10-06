@@ -1,5 +1,5 @@
 
-FROM  amazoncorretto:17 AS build
+FROM  gradle:jdk17 AS build
 WORKDIR /app
 
 COPY . .
@@ -10,7 +10,7 @@ COPY src ./src
 RUN ./gradlew clean build -x test --no-daemon
 
 
-FROM amazoncorretto:17-alpine
+FROM openjdk:17-slim
 WORKDIR /app
 
 ARG jar_file=build/libs/*.jar
