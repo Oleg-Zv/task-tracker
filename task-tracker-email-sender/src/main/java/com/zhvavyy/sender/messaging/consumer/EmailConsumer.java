@@ -4,7 +4,9 @@ import com.zhvavyy.sender.dto.DataForSendEmail;
 import com.zhvavyy.sender.service.EmailSenderImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class EmailConsumer {
 
