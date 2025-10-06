@@ -25,7 +25,6 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     bootstrap-servers: kafka:9092
 
-
 jwt:
     private-key: ${SPRING_JWT_PRIVATE_KEY}
     public-key: ${SPRING_JWT_PUBLIC_KEY}
@@ -34,4 +33,6 @@ logging:
     org.springframework.security.web.FilterChainProxy: TRACE
     org.springframework.security.web.access.ExceptionTranslationFilter: TRACE
     org.springframework.security.web.access.intercept.FilterSecurityInterceptor: TRACE
-
+    org.apache.kafka: DEBUG
+    org.springframework.kafka: DEBUG
+    com.zhvavyy.backend.messaging.producer: DEBUG
