@@ -1,7 +1,7 @@
 syntax = "proto3";
-package com.my.grpc;
+package com.my.grpc.user;
 
-message UsersRequest{
+message SchedulerUsersRequest{
 }
 
 message UserDto{
@@ -17,7 +17,6 @@ message UsersResponse{
 }
 
 service UserService{
-  rpc getAll(UsersRequest) returns (UsersResponse);
-
+  rpc getAll(SchedulerUsersRequest) returns (UsersResponse);
 }
 
