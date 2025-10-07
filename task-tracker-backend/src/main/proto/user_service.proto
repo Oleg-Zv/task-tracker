@@ -16,7 +16,7 @@ message UsersResponse{
   repeated UserDto users=1;
 }
 
-service UserService{
+service UserServiceSchedule{
   rpc getAll(SchedulerUsersRequest) returns (UsersResponse);
 }
 

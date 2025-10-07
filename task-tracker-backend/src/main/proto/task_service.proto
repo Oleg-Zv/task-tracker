@@ -15,6 +15,6 @@ message TaskResponse{
   repeated TaskDto tasks=1;
 }
 
-service TaskService{
+service TaskServiceSchedule{
   rpc findAllByUserId(SchedulerTasksRequest) returns (TaskResponse);
 }

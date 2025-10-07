@@ -7,7 +7,6 @@ import com.zhvavyy.backend.dto.TaskResponse;
 import com.zhvavyy.backend.exception.TaskNotFoundException;
 import com.zhvavyy.backend.mapper.TaskCreateMapper;
 import com.zhvavyy.backend.mapper.TaskMapper;
-import com.zhvavyy.backend.mapper.TaskResponseMapper;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.repository.TaskRepository;
 import lombok.AccessLevel;
@@ -30,7 +29,6 @@ public class TaskServiceImpl implements TaskService {
     TaskRepository taskRepository;
     TaskCreateMapper taskCreateMapper;
     TaskMapper taskMapper;
-    TaskResponseMapper responseMapper;
 
 
     @Transactional
