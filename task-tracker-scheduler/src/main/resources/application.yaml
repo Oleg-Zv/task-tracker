@@ -1,1 +1,7 @@
-spring.application.name=task-tracker-scheduler
+
+
+
+
+task:
+  cron:
+    expression: 0 0 0 * * *
