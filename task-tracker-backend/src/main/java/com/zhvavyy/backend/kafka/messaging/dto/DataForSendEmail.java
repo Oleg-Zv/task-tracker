@@ -1,4 +1,4 @@
-package com.zhvavyy.backend.messaging.producer.dto;
+package com.zhvavyy.backend.kafka.messaging.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

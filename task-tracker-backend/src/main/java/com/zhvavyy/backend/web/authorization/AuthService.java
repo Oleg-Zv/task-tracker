@@ -1,7 +1,7 @@
 package com.zhvavyy.backend.web.authorization;
 
-import com.zhvavyy.backend.messaging.producer.RegisterProducer;
-import com.zhvavyy.backend.messaging.producer.dto.DataForSendEmail;
+import com.zhvavyy.backend.kafka.messaging.producer.RegisterProducer;
+import com.zhvavyy.backend.kafka.messaging.dto.DataForSendEmail;
 import com.zhvavyy.backend.model.User;
 import com.zhvavyy.backend.model.enums.Role;
 import com.zhvavyy.backend.repository.UserRepository;
@@ -15,8 +15,6 @@ import com.zhvavyy.backend.web.security.details.CustomUserDetails;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,9 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Random;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

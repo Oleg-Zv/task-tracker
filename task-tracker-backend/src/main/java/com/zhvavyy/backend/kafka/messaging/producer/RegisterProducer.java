@@ -1,6 +1,6 @@
-package com.zhvavyy.backend.messaging.producer;
+package com.zhvavyy.backend.kafka.messaging.producer;
 
-import com.zhvavyy.backend.messaging.producer.dto.DataForSendEmail;
+import com.zhvavyy.backend.kafka.messaging.dto.DataForSendEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
