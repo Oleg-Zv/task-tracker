@@ -12,7 +12,7 @@ public class EmailConsumer {
 
    private final EmailSenderImpl emailSender;
 
-    @KafkaListener(topics = "EMAIL_SENDING_TASKS",groupId = "my_cons")
+    @KafkaListener(topics = "${app.kafka.topics.user-registration}",groupId = "my_cons")
     public void listen(DataForSendEmail data){
         emailSender.sendMail(data);
     }

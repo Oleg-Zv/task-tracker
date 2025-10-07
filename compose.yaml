@@ -71,6 +71,8 @@ services:
       - KAFKA_NUM_PARTITIONS=4
       - KAFKA_DELETE_TOPIC_ENABLE=true
       - ALLOW_PLAINTEXT_LISTENER=yes #заменить
+      - KAFKA_CREATE_TOPICS=EMAIL_SENDING_TASKS:3:1, USER_REGISTRATION:3:1
+
     volumes:
       - kafka-data:/var/lib/kafka/data
     secrets:
