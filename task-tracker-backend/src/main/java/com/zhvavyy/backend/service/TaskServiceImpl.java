@@ -16,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -59,9 +62,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TaskReadDto> findAllByUserId(Long userId, Pageable pageable) {
-        return taskRepository.findAllByUserId(userId, pageable)
-                             .map(taskMapper::mapTo);
+    public List<TaskReadDto> findAllByUserId(Long userId) {
+        return taskRepository.findAllByUserId(userId)
+                .stream().map(taskMapper::mapTo)
+                .collect(Collectors.toList());
     }
 
     @Override

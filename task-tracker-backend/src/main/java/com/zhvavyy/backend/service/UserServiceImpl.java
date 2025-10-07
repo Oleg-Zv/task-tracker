@@ -23,7 +23,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -83,6 +85,13 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundCustomException("user not fount with id: "+id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<UserReadDto> getAll() {
+        return userRepository.findAll().stream()
+                .map(userMapper::mapTo)
+                .collect(Collectors.toList());
     }
 
     private <T> T getOrThrow(Optional<T> user, String message){
