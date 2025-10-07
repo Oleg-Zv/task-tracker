@@ -36,3 +36,9 @@ logging:
     org.apache.kafka: DEBUG
     org.springframework.kafka: DEBUG
     com.zhvavyy.backend.messaging.producer: DEBUG
+
+app:
+  kafka:
+    topics:
+      email-sending: EMAIL_SENDING_TASKS
+      user-registration: USER_REGISTRATION

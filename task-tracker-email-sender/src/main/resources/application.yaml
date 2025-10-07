@@ -21,3 +21,10 @@ spring:
         spring.json.trusted.packages: "*"
         spring.json.type.mapping: com.zhvavyy.backend.kafka.messaging.dto.DataForSendEmail:com.zhvavyy.sender.dto.DataForSendEmail
     bootstrap-servers: kafka:9092
+
+
+app:
+  kafka:
+    topics:
+      email-sending: EMAIL_SENDING_TASKS
+      user-registration: USER_REGISTRATION
