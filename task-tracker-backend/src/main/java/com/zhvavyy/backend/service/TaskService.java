@@ -2,6 +2,7 @@ package com.zhvavyy.backend.service;
 
 import com.zhvavyy.backend.dto.TaskCreateDto;
 import com.zhvavyy.backend.dto.TaskReadDto;
+import com.zhvavyy.backend.dto.TaskResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,7 +14,7 @@ public interface TaskService {
     Page<TaskReadDto>getAll(Pageable pageable);
     TaskReadDto getById(Long id);
     TaskReadDto add(TaskCreateDto taskDto);
-    List<TaskReadDto> findAllByUserId(Long id);
+    TaskResponse findAllByUserId(Long id);
     Page<TaskReadDto> getAllPending(Pageable pageable);
     Page<TaskReadDto> getAllDone(Pageable pageable);
 }

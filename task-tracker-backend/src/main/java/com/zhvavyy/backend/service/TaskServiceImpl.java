@@ -1,11 +1,13 @@
 package com.zhvavyy.backend.service;
 
 import com.zhvavyy.backend.dto.TaskCreateDto;
+import com.zhvavyy.backend.dto.TaskDto;
 import com.zhvavyy.backend.dto.TaskReadDto;
+import com.zhvavyy.backend.dto.TaskResponse;
 import com.zhvavyy.backend.exception.TaskNotFoundException;
-import com.zhvavyy.backend.exception.UnauthorizedException;
 import com.zhvavyy.backend.mapper.TaskCreateMapper;
 import com.zhvavyy.backend.mapper.TaskMapper;
+import com.zhvavyy.backend.mapper.TaskResponseMapper;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.repository.TaskRepository;
 import lombok.AccessLevel;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -29,6 +30,7 @@ public class TaskServiceImpl implements TaskService {
     TaskRepository taskRepository;
     TaskCreateMapper taskCreateMapper;
     TaskMapper taskMapper;
+    TaskResponseMapper responseMapper;
 
 
     @Transactional
@@ -62,10 +64,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskReadDto> findAllByUserId(Long userId) {
-        return taskRepository.findAllByUserId(userId)
-                .stream().map(taskMapper::mapTo)
-                .collect(Collectors.toList());
+    public TaskResponse findAllByUserId(Long userId) {
+        List<TaskDto> tasks = taskRepository.findAllByUserId(userId)
+                .stream().map(task -> new TaskDto(task.getId(),task.getTitle(),task.getStatus()))
+                .toList();
+        return new TaskResponse(tasks);
     }
 
     @Override
@@ -80,7 +83,6 @@ public class TaskServiceImpl implements TaskService {
 
 
     private Page<TaskReadDto> filterByStatus(Status status, Pageable pageable) {
-
         return taskRepository.findAllByStatus(status, pageable)
                 .map(taskMapper::mapTo);
 
