@@ -42,3 +42,7 @@ app:
     topics:
       email-sending: EMAIL_SENDING_TASKS
       user-registration: USER_REGISTRATION
+
+grpc:
+  port: 9090
+
