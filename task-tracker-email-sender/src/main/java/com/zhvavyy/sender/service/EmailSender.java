@@ -1,7 +1,7 @@
 package com.zhvavyy.sender.service;
 
-import com.zhvavyy.sender.dto.DataForSendEmail;
+import com.zhvavyy.sender.dto.MessageForEmail;
 
 public interface EmailSender {
-    String sendMail(DataForSendEmail data);
+    String sendMail(MessageForEmail data);
 }

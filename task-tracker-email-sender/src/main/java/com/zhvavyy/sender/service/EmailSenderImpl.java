@@ -1,6 +1,6 @@
 package com.zhvavyy.sender.service;
 
-import com.zhvavyy.sender.dto.DataForSendEmail;
+import com.zhvavyy.sender.dto.MessageForEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailParseException;
@@ -17,7 +17,7 @@ public class EmailSenderImpl implements EmailSender {
     private final JavaMailSender mailSender;
 
     @Override
-    public String sendMail(DataForSendEmail data) {
+    public String sendMail(MessageForEmail data) {
        try {
            SimpleMailMessage message = new SimpleMailMessage();
            message.setFrom(sender);

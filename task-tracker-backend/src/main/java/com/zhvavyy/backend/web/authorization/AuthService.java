@@ -1,7 +1,7 @@
 package com.zhvavyy.backend.web.authorization;
 
 import com.zhvavyy.backend.kafka.messaging.producer.RegisterProducer;
-import com.zhvavyy.backend.kafka.messaging.dto.DataForSendEmail;
+import com.zhvavyy.backend.kafka.messaging.dto.MessageForEmail;
 import com.zhvavyy.backend.model.User;
 import com.zhvavyy.backend.model.enums.Role;
 import com.zhvavyy.backend.repository.UserRepository;
@@ -59,7 +59,7 @@ public class AuthService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        DataForSendEmail data= DataForSendEmail.builder()
+        MessageForEmail data= MessageForEmail.builder()
                 .recipient(registerRequest.getEmail())
                 .subject("Successful registration in Task Tracker")
                 .msgBody("Hello " + registerRequest.getFirstname() +" !\n"+
