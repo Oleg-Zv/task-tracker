@@ -29,3 +29,6 @@ grpc:
     user-service:
       address: static://localhost:9090
       negotiation-type: plaintext
+    task-service:
+      address: static://localhost:9091
+      negotiation-type: plaintext
