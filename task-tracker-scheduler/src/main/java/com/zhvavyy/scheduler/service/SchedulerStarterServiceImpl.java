@@ -6,6 +6,8 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SchedulerClientServiceImpl implements SchedulerService {
 
@@ -21,6 +23,7 @@ public class SchedulerClientServiceImpl implements SchedulerService {
 
        UserService.UsersResponse response =  stub.getAll(request);
 
+        List<UserService.UserDto> users = response.getUsersList();
         System.out.println(response);
 
     }

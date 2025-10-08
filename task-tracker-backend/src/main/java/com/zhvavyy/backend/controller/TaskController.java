@@ -3,6 +3,7 @@ package com.zhvavyy.backend.controller;
 
 import com.zhvavyy.backend.dto.TaskCreateDto;
 import com.zhvavyy.backend.dto.TaskReadDto;
+import com.zhvavyy.backend.dto.TaskResponse;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.service.TaskService;
 import jakarta.validation.Valid;
@@ -39,5 +40,10 @@ public class TaskController {
     public ResponseEntity<TaskReadDto> add(@RequestBody @Valid TaskCreateDto taskCreateDto) {
         TaskReadDto task = taskService.add(taskCreateDto);
         return ResponseEntity.ok(task);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponse> findById(@PathVariable Long id){
+        return ResponseEntity.ok(taskService.findAllByUserId(id));
     }
 }
