@@ -1,0 +1,22 @@
+syntax = "proto3";
+package com.my.grpc.user;
+
+message SchedulerUsersRequest{
+}
+
+message UserDto{
+  int64 id = 1;
+  string email = 2;
+  string role = 3;
+  string firstname = 4;
+  string lastname = 5;
+}
+
+message UsersResponse{
+  repeated UserDto users=1;
+}
+
+service UserServiceSchedule{
+  rpc getAll(SchedulerUsersRequest) returns (UsersResponse);
+}
+
