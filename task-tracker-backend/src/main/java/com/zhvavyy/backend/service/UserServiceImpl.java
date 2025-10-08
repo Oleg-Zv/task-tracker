@@ -63,10 +63,7 @@ public class UserServiceImpl implements UserService {
                         .map(userMapper::mapTo),
                 "User not found with id: "+id);
 
-
     }
-
-
 
     @Transactional
     @Override
