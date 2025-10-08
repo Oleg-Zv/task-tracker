@@ -42,10 +42,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<TaskReadDto> getAll(Pageable pageable) {
         return taskRepository.findAll(pageable)
-                .map(taskMapper::mapTo)
-                .map(taskReadDto -> {
-                    throw new TaskNotFoundException("task not found or invalid request");
-                });
+                .map(taskMapper::mapTo);
     }
 
     @Override
@@ -70,20 +67,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TaskReadDto> getAllPending(Pageable pageable) {
-       return filterByStatus(Status.PENDING,pageable);
-    }
-
-    @Override
-    public Page<TaskReadDto> getAllDone(Pageable pageable) {
-      return filterByStatus(Status.DONE,pageable);
-    }
-
-
-    private Page<TaskReadDto> filterByStatus(Status status, Pageable pageable) {
-        return taskRepository.findAllByStatus(status, pageable)
+    public Page<TaskReadDto> findAllByStatus(Status status, Pageable pageable) {
+        return  taskRepository.findAllByStatus(status,pageable)
                 .map(taskMapper::mapTo);
-
     }
 
     private TaskReadDto getByIdOrThrow(Long id){
