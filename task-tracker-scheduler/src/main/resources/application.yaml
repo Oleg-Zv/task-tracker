@@ -1,7 +1,31 @@
+spring:
+  application:
+    name: task-tracker-scheduler
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
 
-
-
+  kafka:
+    producer:
+     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    bootstrap-servers: kafka:9092
 
 task:
   cron:
     expression: 0 0 0 * * *
+
+app:
+  kafka:
+    topics:
+      email-sending: EMAIL_SENDING_TASKS
+
+grpc:
+  client:
+    user-service:
+      address: static://localhost:9090
+      negotiation-type: plaintext
