@@ -1,0 +1,20 @@
+syntax = "proto3";
+package com.my.grpc.task;
+
+message SchedulerTasksRequest{
+  int64 id =1;
+}
+
+message TaskDto{
+  int64 id = 1;
+  string title = 2;
+  string status = 3;
+}
+
+message TaskResponse{
+  repeated TaskDto tasks=1;
+}
+
+service TaskServiceSchedule{
+  rpc findAllByUserId(SchedulerTasksRequest) returns (TaskResponse);
+}
