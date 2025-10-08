@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ListDtoMapper implements Mapper<List<UserService.UserDto>, List<MessageForEmail>> {
+public class UserMessageMapper implements Mapper<List<UserService.UserDto>, List<MessageForEmail>> {
 
     @Override
     public List<MessageForEmail> mapTo(List<UserService.UserDto> object) {

@@ -6,14 +6,16 @@ import com.my.grpc.user.UserServiceScheduleGrpc;
 import com.zhvavyy.backend.dto.UserReadDto;
 import com.zhvavyy.backend.service.UserServiceImpl;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import org.lognet.springboot.grpc.GRpcService;
 
 import java.util.List;
 
 @GRpcService
+@RequiredArgsConstructor
 public class UserServiceScheduleImpl extends UserServiceScheduleGrpc.UserServiceScheduleImplBase {
 
-    UserServiceImpl userService;
+    private  final UserServiceImpl userService;
     @Override
     public void getAll(UserService.SchedulerUsersRequest request, StreamObserver<UserService.UsersResponse> responseObserver) {
         List<UserReadDto> users = userService.getAll();
