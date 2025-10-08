@@ -3,10 +3,9 @@ package com.zhvavyy.backend.service;
 import com.zhvavyy.backend.dto.TaskCreateDto;
 import com.zhvavyy.backend.dto.TaskReadDto;
 import com.zhvavyy.backend.dto.TaskResponse;
+import com.zhvavyy.backend.model.enums.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 
 public interface TaskService {
@@ -15,6 +14,5 @@ public interface TaskService {
     TaskReadDto getById(Long id);
     TaskReadDto add(TaskCreateDto taskDto);
     TaskResponse findAllByUserId(Long id);
-    Page<TaskReadDto> getAllPending(Pageable pageable);
-    Page<TaskReadDto> getAllDone(Pageable pageable);
+    Page<TaskReadDto> findAllByStatus(Status status, Pageable pageable);
 }
