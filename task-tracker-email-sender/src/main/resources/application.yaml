@@ -19,7 +19,9 @@ spring:
       properties:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.trusted.packages: "*"
-        spring.json.type.mapping: com.zhvavyy.backend.kafka.messaging.dto.DataForSendEmail:com.zhvavyy.sender.dto.DataForSendEmail
+        spring.json.type.mapping: >
+         com.zhvavyy.backend.kafka.messaging.dto.MessageForEmail:com.zhvavyy.sender.dto.MessageForEmail,
+         com.zhvavyy.scheduler.kafka.messaging.dto.MessageForEmail:com.zhvavyy.sender.dto.MessageForEmail
     bootstrap-servers: kafka:9092
 
 
