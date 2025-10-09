@@ -49,6 +49,16 @@ services:
       - jwt_public_key
     entrypoint: [ "/entrypoint.sh" ]
 
+
+  task-tracker-scheduler:
+    image: olegzv13/scheduler:v1
+    depends_on:
+      - kafka
+      - task-tracker-backend
+    networks:
+      - default
+
+
   kafka:
     image: apache/kafka:4.0.0
     ports:
