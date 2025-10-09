@@ -2,7 +2,6 @@ package com.zhvavyy.scheduler.service;
 
 import com.my.grpc.user.UserService;
 
-import com.zhvavyy.scheduler.kafka.messaging.mapper.TaskMessageMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ import java.util.List;
 public class UserReportService {
 
     private final GrpcUserClientService grpcClientService;
-    private final TaskMessageMapper listDto;
 
     public List<UserService.UserDto> formingUsersList() {
         return grpcClientService.getResponse().getUsersList();
