@@ -26,6 +26,7 @@ public class TaskServiceScheduleImpl extends TaskServiceScheduleGrpc.TaskService
         for (TaskDto task : allByUserId.tasks()) {
             TaskService.TaskDto taskDto = TaskService.TaskDto.newBuilder()
                     .setId(task.id())
+                    .setEmail(task.email())
                     .setTitle(task.title())
                     .setStatus(task.status().name())
                     .build();
