@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 public class SchedulerStarterServiceImpl implements SchedulerService {
 
 
-    private final UserDispatcherService dispatcherService;
+    private final ReportDispatcherService report;
 
     @Scheduled(cron = "${task.cron.expression}" )
     @Override
     public void scheduleUserReport() {
-      dispatcherService.dispatcherUserReport();
+      report.dispatcherUserReport();
     }
 }
