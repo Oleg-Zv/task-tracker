@@ -40,9 +40,11 @@ logging:
 app:
   kafka:
     topics:
-      email-sending: EMAIL_SENDING_TASKS
       user-registration: USER_REGISTRATION
 
 grpc:
   port: 9090
+  address: 0.0.0.0
+
+
 
