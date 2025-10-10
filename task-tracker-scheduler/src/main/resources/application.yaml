@@ -20,11 +20,14 @@ app:
 grpc:
   client:
     user-service:
-      address: static://task-tracker-backend:9090
+      address: task-tracker-backend:9090
       negotiation-type: plaintext
     task-service:
-      address: static://task-tracker-backend:9090
+      address: task-tracker-backend:9090
       negotiation-type: plaintext
+    GLOBAL:
+      security:
+        client-auth-enabled: false
 
 logging:
   level:

@@ -7,11 +7,11 @@ import com.zhvavyy.backend.dto.UserReadDto;
 import com.zhvavyy.backend.service.UserServiceImpl;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
 
-@GRpcService
+@GrpcService
 @RequiredArgsConstructor
 public class UserServiceScheduleImpl extends UserServiceScheduleGrpc.UserServiceScheduleImplBase {
 
