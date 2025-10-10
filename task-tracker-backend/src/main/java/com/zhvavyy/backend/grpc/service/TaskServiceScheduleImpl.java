@@ -7,11 +7,10 @@ import com.zhvavyy.backend.dto.TaskResponse;
 import com.zhvavyy.backend.service.TaskServiceImpl;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 
-
-@GRpcService
+@GrpcService
 @RequiredArgsConstructor
 public class TaskServiceScheduleImpl extends TaskServiceScheduleGrpc.TaskServiceScheduleImplBase {
 
