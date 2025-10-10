@@ -22,7 +22,7 @@ services:
           - database
 
   task-tracker-email-sender:
-    image: olegzv13/email-sender:v18
+    image: olegzv13/email-sender:v20
     depends_on:
       - kafka
     secrets:
@@ -33,14 +33,15 @@ services:
 
 
   task-tracker-backend:
-    image: olegzv13/backend:v21
+    image: olegzv13/backend:2.9
     ports:
       - "8080:8080"
     depends_on:
-      - database
       - kafka
+      - database
     networks:
       - default
+
     secrets:
       - db_user
       - db_password
@@ -51,7 +52,7 @@ services:
 
 
   task-tracker-scheduler:
-    image: olegzv13/scheduler:v1
+    image: olegzv13/scheduler:1.4
     depends_on:
       - kafka
       - task-tracker-backend
@@ -94,6 +95,7 @@ services:
 networks:
   default:
     driver: overlay
+    attachable: true
 
 volumes:
   kafka-data: {}
