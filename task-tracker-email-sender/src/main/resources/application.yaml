@@ -1,14 +1,18 @@
 spring:
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: argumentoleg@gmail.com
-    password: ${SPRING_MAIL_PASSWORD}
+    host: in-v3.mailjet.com
+    port: 465
+    username: ${SPRING_MAILJET_NAME}
+    password: ${SPRING_MAILJET_PASSWORD}
+    from: argumentoleg@gmail.com
     properties:
       mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
-      mail.smtp.ssl.trust: smtp.gmail.com
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.checkserveridentity: false
+      mail.smtp.ssl.trust: in-v3.mailjet.com
+      mail.smtp.starttls.enable: false
       mail.debug: true
+
 
 
 
