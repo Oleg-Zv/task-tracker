@@ -16,9 +16,9 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-test.yaml
-    contexts: schema,test-data
+#  liquibase:
+#    change-log: classpath:db/changelog/db.changelog-test.yaml
+#    contexts: schema,test-data
 
 logging:
   level:
@@ -28,3 +28,4 @@ logging:
     org.apache.kafka: WARN
     org.springframework.kafka: WARN
     com.zhvavyy.backend.messaging.producer: WARN
+
