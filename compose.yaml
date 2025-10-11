@@ -22,18 +22,19 @@ services:
           - database
 
   task-tracker-email-sender:
-    image: olegzv13/email-sender:v20
+    image: olegzv13/email-sender:2.5
     depends_on:
       - kafka
     secrets:
-      - gmail_password
+      - api_key
+      - secret_key
     entrypoint: ["/entrypoint.sh"]
     networks:
       - default
 
 
   task-tracker-backend:
-    image: olegzv13/backend:2.9
+    image: olegzv13/backend:3.1
     ports:
       - "8080:8080"
     depends_on:
@@ -111,9 +112,11 @@ secrets:
     external: true
   jwt_public_key:
     external: true
-  gmail_password:
-    external: true
   kafka_cluster_id:
+    external: true
+  api_key:
+    external: true
+  secret_key:
     external: true
 
 
