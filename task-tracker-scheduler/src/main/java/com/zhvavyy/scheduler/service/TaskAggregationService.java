@@ -22,55 +22,109 @@ public class TaskAggregationService {
 
     public List<MessageForEmail> buildUserTasksReport(){
         List<Long> usersId = userReportService.getUsersId();
-        List<TaskService.TaskDto> tasks = getUserTasks(usersId);
-        Map<String,Integer> stats = countStatuses(tasks);
-        return formingDto(stats,tasks);
+        Map<Long,List<TaskService.TaskDto>> tasksUserMap = getUserTasks(usersId);
+        Map<Long, Map<String, Integer>> stats = countStatuses(tasksUserMap);
+        Map<Long, StringBuilder> report = formingReports(tasksUserMap);
+        return formingDto(report,stats,tasksUserMap);
     }
 
-    public List<TaskService.TaskDto> getUserTasks(List<Long>usersId){
-        List<TaskService.TaskDto> tasks=new ArrayList<>();
-        for(Long id : usersId){
-        tasks.addAll(grpcTaskClientService.getResponseTask(id));
-        }
-        return tasks;
+
+    public Map<Long,List<TaskService.TaskDto>> getUserTasks(List<Long>usersId){
+      Map<Long, List<TaskService.TaskDto>> userTasksMap= new HashMap<>();
+      for(Long userId: usersId){
+          List<TaskService.TaskDto>tasks = grpcTaskClientService.getResponseTask(userId);
+          userTasksMap.put(userId,tasks);
+      }
+      return userTasksMap;
     }
 
-    public Map<String,Integer> countStatuses(List<TaskService.TaskDto> tasks){
-        int countDone=0;
-        int countPending=0;
-        Map<String, Integer> statuses = new HashMap<>();
-        for (TaskService.TaskDto task: tasks){
-            if(task.getStatus().equals(STATUS_DONE)){
-                countDone++;
+
+    public Map<Long,Map<String,Integer>> countStatuses(Map<Long,List<TaskService.TaskDto>> tasksUserMap){
+        Map<Long, Map<String, Integer>> result = new HashMap<>();
+
+        for(Map.Entry<Long,List<TaskService.TaskDto>>entry: tasksUserMap.entrySet()) {
+            int done = 0;
+            int pending = 0;
+
+            for (TaskService.TaskDto task : entry.getValue()) {
+                if (STATUS_DONE.equals(task.getStatus())) done++;
+                else if (STATUS_PENDING.equals(task.getStatus())) pending++;
             }
-            else if(task.getStatus().equals(STATUS_PENDING)){
-                countPending++;
-            }
-        }
-        statuses.put(STATUS_DONE, countDone);
-        statuses.put(STATUS_PENDING, countPending);
 
-       return statuses;
+            Map<String, Integer> statuses = new HashMap<>();
+            statuses.put(STATUS_DONE, done);
+            statuses.put(STATUS_PENDING, pending);
+
+            result.put(entry.getKey(),statuses);
+        }
+
+       return result;
     }
 
-    public List<MessageForEmail> formingDto(Map<String,Integer>st, List<TaskService.TaskDto> tasks){
+    public Map<Long,StringBuilder> formingReports(Map<Long,List<TaskService.TaskDto>> tasksUserMap) {
+        Map<Long, StringBuilder> reports = new HashMap<>();
+
+        for (Map.Entry<Long, List<TaskService.TaskDto>> entry : tasksUserMap.entrySet()) {
+            StringBuilder body = new StringBuilder("Задачи: \n");
+
+            List<TaskService.TaskDto> done =
+                    entry.getValue().stream()
+                            .filter(t -> t.getStatus().equals(STATUS_DONE))
+                            .limit(5)
+                            .toList();
+
+            List<TaskService.TaskDto> pending =
+                    entry.getValue().stream()
+                            .filter(t -> t.getStatus().equals(STATUS_PENDING))
+                            .limit(5)
+                            .toList();
+
+
+            if (!done.isEmpty()) {
+                done.forEach(t -> body.append("- ").append(t.getTitle()).append("\n"));
+            }
+            if (!pending.isEmpty()) {
+                pending.forEach(t -> body.append("- ").append(t.getTitle()).append("\n"));
+
+            }
+            reports.put(entry.getKey(),body);
+        }
+
+        return reports;
+    }
+
+
+    public List<MessageForEmail> formingDto(Map<Long, StringBuilder> reportMap,
+                                            Map<Long, Map<String, Integer>> statusesMap,
+                                            Map<Long, List<TaskService.TaskDto>> tasksUserMap) {
+
         List<MessageForEmail> message = new ArrayList<>();
-        for(Map.Entry<String,Integer>entry: st.entrySet()) {
-            for (TaskService.TaskDto task : tasks) {
-             if(entry.getKey().equals(STATUS_DONE) && entry.getValue()>=1){
-                 message.add(MessageForEmail.builder()
-                         .recipient(task.getEmail())
-                         .msgBody("Задача: " + task.getTitle())
-                         .subject("За сегодня вы выполнили "+ entry.getValue() + " задач!")
-                         .build());
-             }
-             if(entry.getKey().equals(STATUS_PENDING) && entry.getValue()>=1){
-                 message.add(MessageForEmail.builder()
-                         .recipient(task.getEmail())
-                         .msgBody("Задача: " + task.getTitle())
-                         .subject("За сегодня "+ entry.getValue() + " несделанных задач!")
-                         .build());
-             }
+
+        for (Long userId : tasksUserMap.keySet()) {
+            List<TaskService.TaskDto> tasks = tasksUserMap.get(userId);
+            if (tasks.isEmpty()) continue;
+
+            String email = tasks.get(0).getEmail();
+            Map<String,Integer> stats= statusesMap.get(userId);
+            StringBuilder report = reportMap.get(userId);
+
+            int doneCount = stats.getOrDefault(STATUS_DONE, 0);
+            int pendingCount = stats.getOrDefault(STATUS_PENDING, 0);
+
+            if (doneCount > 0) {
+                message.add(MessageForEmail.builder()
+                        .recipient(email)
+                        .msgBody(report.toString())
+                        .subject("За сегодня вы выполнили " + doneCount + " задач!")
+                        .build());
+            }
+            if (pendingCount > 0) {
+                message.add(MessageForEmail.builder()
+                        .recipient(email)
+                        .msgBody(report.toString())
+                        .subject("За сегодня " + pendingCount + " несделанных задач!")
+                        .build());
+
             }
         }
         return message;
