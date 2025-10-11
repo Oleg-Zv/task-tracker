@@ -34,7 +34,7 @@ services:
 
 
   task-tracker-backend:
-    image: olegzv13/backend:3.1
+    image: olegzv13/backend:3.3
     ports:
       - "8080:8080"
     depends_on:
@@ -53,7 +53,7 @@ services:
 
 
   task-tracker-scheduler:
-    image: olegzv13/scheduler:1.4
+    image: olegzv13/scheduler:1.5
     depends_on:
       - kafka
       - task-tracker-backend
