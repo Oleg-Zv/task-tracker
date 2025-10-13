@@ -7,8 +7,10 @@ import com.zhvavyy.backend.dto.TaskResponse;
 import com.zhvavyy.backend.exception.TaskNotFoundException;
 import com.zhvavyy.backend.mapper.TaskCreateMapper;
 import com.zhvavyy.backend.mapper.TaskMapper;
+import com.zhvavyy.backend.model.Task;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.repository.TaskRepository;
+import com.zhvavyy.backend.web.security.details.CustomUserDetails;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -52,10 +54,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public TaskReadDto add(TaskCreateDto taskDto) {
+    public TaskReadDto add(TaskCreateDto taskDto, CustomUserDetails userDetails) {
+        Task task = taskCreateMapper.mapTo(taskDto);
+        task.setUser(userDetails.getUser());
          return taskMapper
-                 .mapTo(taskRepository
-                 .save(taskCreateMapper.mapTo(taskDto)));
+                 .mapTo(taskRepository.save(task));
     }
 
     @Override

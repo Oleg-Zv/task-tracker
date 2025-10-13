@@ -6,6 +6,7 @@ import com.zhvavyy.backend.dto.TaskReadDto;
 import com.zhvavyy.backend.dto.TaskResponse;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.service.TaskService;
+import com.zhvavyy.backend.web.security.details.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +39,10 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskReadDto> add(@RequestBody @Valid TaskCreateDto taskCreateDto) {
-        TaskReadDto task = taskService.add(taskCreateDto);
+    public ResponseEntity<TaskReadDto> add(@RequestBody @Valid TaskCreateDto taskCreateDto,
+                                           Authentication authentication) {
+        CustomUserDetails userDetails =(CustomUserDetails)authentication.getPrincipal();
+        TaskReadDto task = taskService.add(taskCreateDto,userDetails);
         return ResponseEntity.ok(task);
     }
 
