@@ -2,6 +2,7 @@ package com.zhvavyy.scheduler.service;
 
 import com.my.grpc.task.TaskService;
 
+import com.zhvavyy.scheduler.dto.Statuses;
 import com.zhvavyy.scheduler.kafka.messaging.dto.MessageForEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class TaskAggregationService {
         List<Long> usersId = userReportService.getUsersId();
         Map<Long,List<TaskService.TaskDto>> tasksUserMap = getUserTasks(usersId);
         Map<Long, Map<String, Integer>> stats = countStatuses(tasksUserMap);
-        Map<Long, StringBuilder> report = formingReports(tasksUserMap);
+        Map<Long, Statuses> report = formingReports(tasksUserMap);
         return formingDto(report,stats,tasksUserMap);
     }
 
@@ -61,11 +62,14 @@ public class TaskAggregationService {
        return result;
     }
 
-    public Map<Long,StringBuilder> formingReports(Map<Long,List<TaskService.TaskDto>> tasksUserMap) {
-        Map<Long, StringBuilder> reports = new HashMap<>();
+    public Map<Long,Statuses> formingReports(Map<Long,List<TaskService.TaskDto>> tasksUserMap) {
+        Map<Long, Statuses> reports = new HashMap<>();
 
         for (Map.Entry<Long, List<TaskService.TaskDto>> entry : tasksUserMap.entrySet()) {
-            StringBuilder body = new StringBuilder("Задачи: \n");
+            StringBuilder bodyDone = new StringBuilder();
+            StringBuilder bodyPending = new StringBuilder();
+            StringBuilder bodyCombined = new StringBuilder();
+
 
             List<TaskService.TaskDto> done =
                     entry.getValue().stream()
@@ -81,20 +85,27 @@ public class TaskAggregationService {
 
 
             if (!done.isEmpty()) {
-                done.forEach(t -> body.append("- ").append(t.getTitle()).append("\n"));
+                done.forEach(t -> bodyDone.append("- ").append(t.getTitle()).append("\n"));
             }
             if (!pending.isEmpty()) {
-                pending.forEach(t -> body.append("- ").append(t.getTitle()).append("\n"));
-
+                pending.forEach(t -> bodyPending.append("- ").append(t.getTitle()).append("\n"));
             }
-            reports.put(entry.getKey(),body);
+            if(!done.isEmpty() && !pending.isEmpty()){
+                bodyCombined.append("Выполненные задачи:\n");
+                done.forEach(t -> bodyCombined.append("- ").append(t.getTitle()).append("\n"));
+
+                bodyCombined.append("\nНевыполненные задачи:\n");
+                pending.forEach(t -> bodyCombined.append("- ").append(t.getTitle()).append("\n"));
+            }
+            reports.put(entry.getKey(),
+                    new Statuses(bodyDone.toString(),bodyPending.toString(),bodyCombined.toString()));
         }
 
         return reports;
     }
 
 
-    public List<MessageForEmail> formingDto(Map<Long, StringBuilder> reportMap,
+    public List<MessageForEmail> formingDto(Map<Long, Statuses> reportMap,
                                             Map<Long, Map<String, Integer>> statusesMap,
                                             Map<Long, List<TaskService.TaskDto>> tasksUserMap) {
 
@@ -106,25 +117,33 @@ public class TaskAggregationService {
 
             String email = tasks.get(0).getEmail();
             Map<String,Integer> stats= statusesMap.get(userId);
-            StringBuilder report = reportMap.get(userId);
+            Statuses reportStatus = reportMap.get(userId);
 
             int doneCount = stats.getOrDefault(STATUS_DONE, 0);
             int pendingCount = stats.getOrDefault(STATUS_PENDING, 0);
 
-            if (doneCount > 0) {
+            if(doneCount>0 && pendingCount>0){
                 message.add(MessageForEmail.builder()
                         .recipient(email)
-                        .msgBody(report.toString())
-                        .subject("За сегодня вы выполнили " + doneCount + " задач!")
+                        .msgBody(reportStatus.combinedBody())
+                        .subject("Итоги дня: \n" +
+                                "Задач выполнено: " + doneCount+
+                                "\nНесделанных задач: "+ pendingCount)
                         .build());
             }
-            if (pendingCount > 0) {
+            else if (doneCount > 0) {
                 message.add(MessageForEmail.builder()
                         .recipient(email)
-                        .msgBody(report.toString())
-                        .subject("За сегодня " + pendingCount + " несделанных задач!")
+                        .msgBody(reportStatus.doneBody())
+                        .subject("Выполненных задач за сегодня: " + doneCount)
                         .build());
-
+            }
+           else if (pendingCount > 0) {
+                message.add(MessageForEmail.builder()
+                        .recipient(email)
+                        .msgBody(reportStatus.pendingBody())
+                        .subject("Кол-во несделанных задач: " + pendingCount)
+                        .build());
             }
         }
         return message;
