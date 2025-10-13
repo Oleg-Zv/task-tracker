@@ -1,4 +1,4 @@
 package com.zhvavyy.scheduler.dto;
 
-public class Statuses {
+public record Statuses (String doneBody,String pendingBody,String combinedBody){
 }
