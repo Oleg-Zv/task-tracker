@@ -2,6 +2,7 @@ package com.zhvavyy.backend.controller;
 
 import com.zhvavyy.backend.dto.CurrentUserDto;
 import com.zhvavyy.backend.service.UserService;
+import com.zhvavyy.backend.web.security.details.CustomUserDetails;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,10 +24,11 @@ public class UserController {
 
     UserService userService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or principal != null")
     @GetMapping("/current")
     public ResponseEntity<CurrentUserDto> getCurrentUser(Authentication authentication){
-        var user =userService.getUser((UserDetails) authentication.getPrincipal());
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        var user =userService.getUser(userDetails);
           return ResponseEntity.ok(user);
     }
 }
