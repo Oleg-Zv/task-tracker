@@ -31,9 +31,10 @@ public class JwtUtils{
                        .stream()
                        .map(GrantedAuthority::getAuthority)
                        .collect(Collectors.toList()))
-               .issuedAt(Instant.ofEpochSecond(Instant.now().getEpochSecond()))
-               .expiresAt(Instant.ofEpochSecond(Instant.now().plus(15, ChronoUnit.MINUTES).getEpochSecond()))
-               .build();
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plus(15, ChronoUnit.MINUTES))
+
+                .build();
 
         Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims));
         return jwt.getTokenValue();
@@ -41,13 +42,15 @@ public class JwtUtils{
 
 
     public boolean checkToken(String token){
-       try {
-           jwtDecoder.decode(token);
-           return true;
-       }catch (JwtException e){
-           throw new JwtException("token is invalid or expired");
-       }
+        try {
+            jwtDecoder.decode(token);
+            return true;
+        } catch (JwtException e) {
+            System.out.println("Invalid or expired token: " + e.getMessage());
+            return false;
+        }
     }
+
 
     public String getUsername(String token){
        return jwtDecoder.decode(token)
