@@ -33,7 +33,6 @@ public class RegisterRequest {
     @NotBlank
     String lastname;
 
-    @NotNull
     Role role;
 
 }

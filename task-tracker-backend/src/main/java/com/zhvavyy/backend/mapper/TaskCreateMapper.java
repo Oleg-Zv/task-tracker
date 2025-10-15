@@ -25,6 +25,5 @@ public class TaskCreateMapper implements Mapper<TaskCreateDto, Task> {
            task.setTitle(object.getTitle());
            task.setDescription(object.getDescription());
            task.setStatus(object.getStatus());
-           task.setDoneAt(object.getDoneAt());
     }
 }

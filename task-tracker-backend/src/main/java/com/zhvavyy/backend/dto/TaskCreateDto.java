@@ -23,7 +23,4 @@ public class TaskCreateDto {
     Status status;
 
 
-    Instant doneAt;
-
-
 }

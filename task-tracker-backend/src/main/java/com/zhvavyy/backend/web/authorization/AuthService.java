@@ -48,9 +48,9 @@ public class AuthService {
         User user = User.builder()
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .role(Role.USER)
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
+                .role(Role.USER)
                 .build();
 
         var customUserDetails = new CustomUserDetails(userRepository.save(user));
