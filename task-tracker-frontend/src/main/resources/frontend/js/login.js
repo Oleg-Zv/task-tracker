@@ -20,7 +20,7 @@ function login() {
         url: `${API_URL}/auth/login`,
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ email, password }),
+        data: JSON.stringify({ email, rawPassword: password }),
         success: function (res) {
             localStorage.setItem("jwt", res.jwtToken);
             localStorage.setItem("email", email);
