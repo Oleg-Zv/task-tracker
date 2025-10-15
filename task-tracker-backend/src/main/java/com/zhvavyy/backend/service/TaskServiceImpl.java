@@ -1,9 +1,6 @@
 package com.zhvavyy.backend.service;
 
-import com.zhvavyy.backend.dto.TaskCreateDto;
-import com.zhvavyy.backend.dto.TaskDto;
-import com.zhvavyy.backend.dto.TaskReadDto;
-import com.zhvavyy.backend.dto.TaskResponse;
+import com.zhvavyy.backend.dto.*;
 import com.zhvavyy.backend.exception.TaskNotFoundException;
 import com.zhvavyy.backend.mapper.TaskCreateMapper;
 import com.zhvavyy.backend.mapper.TaskMapper;
@@ -98,6 +95,18 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(task);
 
         return taskMapper.mapTo(task);
+    }
+
+    @Override
+    @Transactional
+    public TaskReadDto changeTask(Long id, TaskUpdate taskUpdate) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Задача с id " + id + " не найдена"));
+
+        if (taskUpdate.title() != null) task.setTitle(taskUpdate.title());
+        if (taskUpdate.description() != null) task.setDescription(taskUpdate.description());
+
+        return taskMapper.mapTo(taskRepository.save(task));
     }
 
 

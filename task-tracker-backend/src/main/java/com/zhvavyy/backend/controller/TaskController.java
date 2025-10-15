@@ -4,6 +4,7 @@ package com.zhvavyy.backend.controller;
 import com.zhvavyy.backend.dto.TaskCreateDto;
 import com.zhvavyy.backend.dto.TaskReadDto;
 import com.zhvavyy.backend.dto.TaskResponse;
+import com.zhvavyy.backend.dto.TaskUpdate;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.service.TaskService;
 import com.zhvavyy.backend.web.security.details.CustomUserDetails;
@@ -48,7 +49,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> findById(@PathVariable Long id){
+    public ResponseEntity<TaskResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.findAllByUserId(id));
     }
 
@@ -71,6 +72,12 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskReadDto> changeTask(@PathVariable Long id,
+                                                  @RequestBody @Valid TaskUpdate update) {
+        return ResponseEntity.ok(taskService.changeTask(id, update));
     }
 
 }

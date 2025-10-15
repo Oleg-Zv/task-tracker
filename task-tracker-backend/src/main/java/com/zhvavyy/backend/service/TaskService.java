@@ -3,6 +3,7 @@ package com.zhvavyy.backend.service;
 import com.zhvavyy.backend.dto.TaskCreateDto;
 import com.zhvavyy.backend.dto.TaskReadDto;
 import com.zhvavyy.backend.dto.TaskResponse;
+import com.zhvavyy.backend.dto.TaskUpdate;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.web.security.details.CustomUserDetails;
 import org.springframework.data.domain.Page;
@@ -18,4 +19,5 @@ public interface TaskService {
     Page<TaskReadDto> findAllByStatus(Status status, Pageable pageable);
     TaskReadDto markAsDone(Long id,CustomUserDetails userDetails);
     TaskReadDto markAsPending(Long id,CustomUserDetails userDetails);
+    TaskReadDto changeTask(Long id, TaskUpdate update);
 }
