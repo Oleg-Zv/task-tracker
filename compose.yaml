@@ -34,7 +34,7 @@ services:
 
 
   task-tracker-backend:
-    image: olegzv13/backend:3.8
+    image: olegzv13/backend:4.6
     ports:
       - "8080:8080"
     depends_on:
@@ -60,6 +60,15 @@ services:
     networks:
       - default
 
+
+  task-tracker-frontend:
+    image: olegzv13/frontend:3.6
+    ports:
+      - "80:80"
+    depends_on:
+      - task-tracker-backend
+    networks:
+      - default
 
   kafka:
     image: apache/kafka:4.0.0
