@@ -1,0 +1,145 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+}
+
+/* Шапка */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1e293b;
+    color: white;
+    padding: 12px 24px;
+}
+
+/* Контейнер задач */
+#tasks-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 12px;
+    padding: 20px 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.task-section {
+    margin-bottom: 24px;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Элемент задачи */
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9fafb;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.task-item:hover {
+    background: #e9eef7;
+}
+
+.task-title {
+    flex: 1;
+    color: #111827;
+    font-weight: 500;
+}
+
+/* Кнопки */
+.task-btn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.task-btn:hover {
+    background-color: #1d4ed8;
+}
+
+/* Добавление задачи */
+.add-task {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.add-task input,
+.add-task textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.add-task button {
+    background-color: #059669;
+    color: white;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.add-task button:hover {
+    background-color: #047857;
+}
+
+/* --- Красивое оформление модалки --- */
+#taskModal .modal-content {
+    background-color: #f3f4f6; /* мягкий светло-серый фон */
+    color: #111827; /* чёткий тёмный текст */
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+}
+
+#taskModal .modal-body input,
+#taskModal .modal-body textarea {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #111827;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+#taskModal .modal-body input:focus,
+#taskModal .modal-body textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* Кнопки в модалке */
+#taskModal .modal-footer .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: transform 0.1s ease-in-out;
+}
+
+#taskModal .modal-footer .btn:hover {
+    transform: scale(1.05);
+}
+
+/* Анимация появления модалки */
+.modal.fade .modal-dialog {
+    transition: transform 0.25s ease-out;
+    transform: translateY(-20px);
+}
+.modal.show .modal-dialog {
+    transform: translateY(0);
+}
