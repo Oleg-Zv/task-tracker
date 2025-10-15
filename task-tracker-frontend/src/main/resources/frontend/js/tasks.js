@@ -2,8 +2,10 @@ const API_URL = "http://localhost:8080";
 let token = localStorage.getItem("jwt");
 let email = localStorage.getItem("email");
 let currentTaskId = null;
-let currentTaskStatus = null; // <-- NEW: хранит статус открытой задачи ("DONE" / "PENDING")
+let currentTaskStatus = null;
 let taskModal;
+let originalTitle = "";
+let originalDesc = "";
 
 $(document).ready(function () {
     if (!token) {
@@ -16,28 +18,29 @@ $(document).ready(function () {
     $("#add-task-btn").click(addTask);
     $("#back-btn").click(() => window.location.href = "index.html");
 
-    // Инициализация глобальной модалки
+    // Инициализация модалки
     taskModal = new bootstrap.Modal($("#taskModal"));
 
-    // Сохранение изменений при вводе (debounce можно добавить позже)
-    $("#modal-task-title, #modal-task-desc").on("input", function () {
-        if (!currentTaskId) return;
-        saveTaskChanges();
+    // Кнопки в модалке
+    $("#modal-delete-btn").click(() => currentTaskId && deleteTask(currentTaskId));
+    $("#modal-toggle-btn").click(() => currentTaskId && toggleTaskDone(currentTaskStatus !== "DONE"));
+    $("#modal-edit-btn").click(enableEditing);
+    $("#modal-save-btn").click(saveTaskChanges);
+    $("#modal-cancel-btn").click(cancelEditing);
+
+    // Toggle списков
+    $("#toggle-done").click(function() {
+        $("#done-tasks").collapse('toggle');
+        $(this).toggleClass("bi-caret-down-fill bi-caret-up-fill");
     });
 
-    // Удаление
-    $("#modal-delete-btn").off("click").on("click", function () {
-        if (!currentTaskId) return;
-        deleteTask(currentTaskId);
+    $("#toggle-pending").click(function() {
+        $("#pending-tasks").collapse('toggle');
+        $(this).toggleClass("bi-caret-down-fill bi-caret-up-fill");
     });
 
-    // Переключение статуса через кнопку в модалке
-    $("#modal-toggle-btn").off("click").on("click", function () {
-        if (!currentTaskId) return;
-        // используем currentTaskStatus, а не чекбокс
-        const currentlyDone = currentTaskStatus === "DONE";
-        toggleTaskDone(!currentlyDone);
-    });
+    // Изначально списки скрыты
+    $("#done-tasks, #pending-tasks").collapse('hide');
 
     loadTasks();
 });
@@ -68,6 +71,7 @@ function renderTasks(tasks) {
             .text(t.title)
             .css("cursor", "pointer")
             .click(() => openTaskModal(t));
+
         if (t.status === "PENDING") $("#pending-tasks").append(li);
         else $("#done-tasks").append(li);
     });
@@ -87,55 +91,79 @@ function addTask() {
         contentType: "application/json",
         data: JSON.stringify(newTask),
         success: function (createdTask) {
-            $("#new-task-title").val("");
-            $("#new-task-desc").val("");
+            $("#new-task-title, #new-task-desc").val("");
+            loadTasks();
 
-            const li = $("<li>")
-                .addClass("list-group-item")
-                .text(createdTask.title)
-                .css("cursor", "pointer")
-                .click(() => openTaskModal(createdTask));
-            if (createdTask.status === "PENDING") $("#pending-tasks").append(li);
-            else $("#done-tasks").append(li);
+            // 🚀 Авто-разворачивание нужного списка
+            if (createdTask.status === "PENDING") {
+                $("#pending-tasks").collapse('show');
+                $("#toggle-pending").removeClass("bi-caret-down-fill").addClass("bi-caret-up-fill");
+            } else {
+                $("#done-tasks").collapse('show');
+                $("#toggle-done").removeClass("bi-caret-down-fill").addClass("bi-caret-up-fill");
+            }
 
             showStatusToast("Задача добавлена!", true);
         },
-        error: function (xhr) { alert("Ошибка при добавлении задачи: " + xhr.responseText); }
+        error: function (xhr) {
+            alert("Ошибка при добавлении задачи: " + xhr.responseText);
+        }
     });
 }
 
 function openTaskModal(task) {
     currentTaskId = task.id;
-    currentTaskStatus = task.status; // <-- NEW: сохраняем статус открытой задачи
-    $("#modal-task-title").val(task.title);
-    $("#modal-task-desc").val(task.description || "");
+    currentTaskStatus = task.status;
+    originalTitle = task.title;
+    originalDesc = task.description || "";
 
-    // Обновляем текст и стиль кнопки переключения статуса
-    const toggleBtn = $("#modal-toggle-btn");
-    if (currentTaskStatus === "DONE") {
-        toggleBtn.html('<i class="bi bi-x-circle me-2"></i> Пометить не сделанной');
-        toggleBtn.removeClass("btn-success").addClass("btn-warning");
-    } else {
-        toggleBtn.html('<i class="bi bi-check2-circle me-2"></i> Пометить сделанной');
-        toggleBtn.removeClass("btn-warning").addClass("btn-success");
-    }
+    $("#modal-task-title").val(originalTitle).prop("readonly", true);
+    $("#modal-task-desc").val(originalDesc).prop("readonly", true);
 
+    $("#modal-edit-btn").removeClass("d-none");
+    $("#modal-save-btn, #modal-cancel-btn").addClass("d-none");
+
+    updateToggleBtn();
     taskModal.show();
+}
+
+function enableEditing() {
+    $("#modal-task-title, #modal-task-desc").prop("readonly", false);
+    $("#modal-edit-btn").addClass("d-none");
+    $("#modal-save-btn, #modal-cancel-btn").removeClass("d-none");
 }
 
 function saveTaskChanges() {
     if (!currentTaskId) return;
+
     const title = $("#modal-task-title").val().trim();
-    const description = $("#modal-task-desc").val().trim() || " ";
+    const desc = $("#modal-task-desc").val().trim() || " ";
+
+    if (!title) { showStatusToast("Название не может быть пустым!", false); return; }
+
     $.ajax({
         url: `${API_URL}/app/v1/tasks/${currentTaskId}`,
         method: "PUT",
         headers: { Authorization: "Bearer " + token },
         contentType: "application/json",
-        data: JSON.stringify({ title, description }),
-        success: loadTasks,
-        error: function (xhr) { alert("Ошибка при сохранении: " + xhr.responseText); }
+        data: JSON.stringify({ title, description: desc }),
+        success: function (updatedTask) {
+            showStatusToast("Задача изменена!", true);
+            loadTasks();
+            taskModal.hide();
+            resetModalState();
+        },
+        error: function (xhr) {
+            showStatusToast("Ошибка при сохранении: " + xhr.responseText, false);
+        }
     });
+}
+
+function cancelEditing() {
+    $("#modal-task-title").val(originalTitle).prop("readonly", true);
+    $("#modal-task-desc").val(originalDesc).prop("readonly", true);
+    $("#modal-edit-btn").removeClass("d-none");
+    $("#modal-save-btn, #modal-cancel-btn").addClass("d-none");
 }
 
 function toggleTaskDone(done) {
@@ -148,33 +176,30 @@ function toggleTaskDone(done) {
         url,
         method: "PUT",
         headers: { Authorization: "Bearer " + token },
-        success: function(updatedTask) {
-            // Обновляем локальную переменную статуса
+        success: function (updatedTask) {
             currentTaskStatus = updatedTask.status;
-
-            // Обновим кнопку в модалке в соответствии с ответом
-            const isDone = currentTaskStatus === "DONE";
-            const toggleBtn = $("#modal-toggle-btn");
-            if (isDone) {
-                toggleBtn.html('<i class="bi bi-x-circle me-2"></i> Пометить не сделанной');
-                toggleBtn.removeClass("btn-success").addClass("btn-warning");
-            } else {
-                toggleBtn.html('<i class="bi bi-check2-circle me-2"></i> Пометить сделанной');
-                toggleBtn.removeClass("btn-warning").addClass("btn-success");
-            }
-
+            updateToggleBtn();
             loadTasks();
-            showStatusToast(isDone ? "Задача выполнена!" : "Задача не выполнена!", isDone);
+            showStatusToast(currentTaskStatus === "DONE" ? "Задача выполнена!" : "Задача не выполнена!", currentTaskStatus === "DONE");
 
-            // Авто-закрытие модалки и очистка currentTaskId
             setTimeout(() => {
                 taskModal.hide();
-                currentTaskId = null;
-                currentTaskStatus = null;
+                resetModalState();
             }, 800);
         },
-        error: function(xhr) { alert("Ошибка при изменении статуса: " + xhr.responseText); }
+        error: function (xhr) { showStatusToast("Ошибка при изменении статуса: " + xhr.responseText, false); }
     });
+}
+
+function updateToggleBtn() {
+    const toggleBtn = $("#modal-toggle-btn");
+    if (currentTaskStatus === "DONE") {
+        toggleBtn.html('<i class="bi bi-x-circle me-2"></i> Пометить не сделанной')
+            .removeClass("btn-success").addClass("btn-warning");
+    } else {
+        toggleBtn.html('<i class="bi bi-check2-circle me-2"></i> Пометить сделанной')
+            .removeClass("btn-warning").addClass("btn-success");
+    }
 }
 
 function deleteTask(id) {
@@ -185,18 +210,21 @@ function deleteTask(id) {
         headers: { Authorization: "Bearer " + token },
         success: function () {
             loadTasks();
-            currentTaskId = null;
-            currentTaskStatus = null;
             taskModal.hide();
+            resetModalState();
             showStatusToast("Задача удалена!", true);
         },
-        error: function (xhr) {
-            showStatusToast("Ошибка при удалении задачи!", false);
-        }
+        error: function () { showStatusToast("Ошибка при удалении задачи!", false); }
     });
 }
 
-// === Всплывающее уведомление ===
+function resetModalState() {
+    currentTaskId = null;
+    currentTaskStatus = null;
+    originalTitle = "";
+    originalDesc = "";
+}
+
 function showStatusToast(message, success = true) {
     let toast = $("#status-toast");
     if (toast.length === 0) {
