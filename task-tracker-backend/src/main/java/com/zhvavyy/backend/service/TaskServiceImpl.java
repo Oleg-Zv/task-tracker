@@ -70,6 +70,39 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
+    public TaskReadDto markAsDone(Long id, CustomUserDetails userDetails) {
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена"));
+
+        if (!task.getUser().getId().equals(userDetails.getUser().getId())) {
+            throw new SecurityException("Нет доступа к задаче");
+        }
+        task.setStatus(Status.DONE);
+        taskRepository.save(task);
+
+        return taskMapper.mapTo(task);
+    }
+
+    @Override
+    @Transactional
+    public TaskReadDto markAsPending(Long id, CustomUserDetails userDetails) {
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена"));
+
+        if (!task.getUser().getId().equals(userDetails.getUser().getId())) {
+            throw new SecurityException("Нет доступа к задаче");
+        }
+        task.setStatus(Status.PENDING);
+        task.setDoneAt(null);
+        taskRepository.save(task);
+
+        return taskMapper.mapTo(task);
+    }
+
+
+
+    @Override
     public Page<TaskReadDto> findAllByStatus(Status status, Pageable pageable) {
         return  taskRepository.findAllByStatus(status,pageable)
                 .map(taskMapper::mapTo);

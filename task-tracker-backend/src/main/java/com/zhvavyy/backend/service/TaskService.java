@@ -16,4 +16,6 @@ public interface TaskService {
     TaskReadDto add(TaskCreateDto taskDto, CustomUserDetails userDetails);
     TaskResponse findAllByUserId(Long id);
     Page<TaskReadDto> findAllByStatus(Status status, Pageable pageable);
+    TaskReadDto markAsDone(Long id,CustomUserDetails userDetails);
+    TaskReadDto markAsPending(Long id,CustomUserDetails userDetails);
 }

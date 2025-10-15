@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,4 +51,26 @@ public class TaskController {
     public ResponseEntity<TaskResponse> findById(@PathVariable Long id){
         return ResponseEntity.ok(taskService.findAllByUserId(id));
     }
+
+    @PutMapping("/{id}/done")
+    public ResponseEntity<TaskReadDto> markAsDone(@PathVariable Long id, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        TaskReadDto updated = taskService.markAsDone(id, userDetails);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PutMapping("/{id}/pending")
+    public ResponseEntity<TaskReadDto> markTaskPending(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(taskService.markAsPending(id, userDetails));
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
