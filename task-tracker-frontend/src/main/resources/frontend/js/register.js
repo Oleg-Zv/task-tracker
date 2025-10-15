@@ -8,22 +8,41 @@ $(function () {
 });
 
 function register() {
-    const firstname = $("#reg-firstname").val();
-    const lastname = $("#reg-lastname").val();
-    const email = $("#reg-email").val();
+    const firstname = $("#reg-firstname").val().trim();
+    const lastname = $("#reg-lastname").val().trim();
+    const email = $("#reg-email").val().trim();
     const password = $("#reg-password").val();
     const repeat = $("#reg-repeat").val();
 
+    // Проверка на пустые поля
     if (!firstname || !lastname || !email || !password || !repeat) {
         alert("Заполни все поля!");
         return;
     }
 
+    // Проверка длины полей
+    if (firstname.length < 2 || firstname.length > 20) {
+        alert("Имя должно быть от 2 до 20 символов!");
+        return;
+    }
+
+    if (lastname.length < 2 || lastname.length > 20) {
+        alert("Фамилия должна быть от 2 до 20 символов!");
+        return;
+    }
+
+    if (password.length < 6 || password.length > 30) {
+        alert("Пароль должен быть от 6 до 30 символов!");
+        return;
+    }
+
+    // Проверка совпадения паролей
     if (password !== repeat) {
         alert("Пароли не совпадают!");
         return;
     }
 
+    // Отправка запроса на регистрацию
     $.ajax({
         url: `${API_URL}/auth/signup`,
         method: "POST",
