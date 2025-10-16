@@ -1,10 +1,13 @@
 package com.zhvavyy.backend.grpc.service;
 
-import com.my.grpc.task.TaskService;
-import com.my.grpc.task.TaskServiceScheduleGrpc;
+
 import com.zhvavyy.backend.dto.TaskDto;
 import com.zhvavyy.backend.dto.TaskResponse;
-import com.zhvavyy.backend.service.TaskServiceImpl;
+import com.zhvavyy.backend.grpc.TaskServiceScheduleGrpc;
+import com.zhvavyy.backend.grpc.TaskServiceScheduleProto;
+
+import com.zhvavyy.backend.grpc.mapper.TaskGrpcMapper;
+import com.zhvavyy.backend.service.TaskService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -14,22 +17,16 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @RequiredArgsConstructor
 public class TaskServiceScheduleImpl extends TaskServiceScheduleGrpc.TaskServiceScheduleImplBase {
 
-    private final TaskServiceImpl taskService;
+    private final TaskService taskService;
 
     @Override
-    public void findAllByUserId(TaskService.SchedulerTasksRequest request, StreamObserver<TaskService.TaskResponse> responseObserver) {
+    public void findAllByUserId(TaskServiceScheduleProto.SchedulerTasksRequest request, StreamObserver<TaskServiceScheduleProto.TaskResponse> responseObserver) {
         TaskResponse allByUserId = taskService.findAllByUserId(request.getId());
 
-        TaskService.TaskResponse.Builder response = TaskService.TaskResponse.newBuilder();
+        TaskServiceScheduleProto.TaskResponse.Builder response = TaskServiceScheduleProto.TaskResponse.newBuilder();
 
         for (TaskDto task : allByUserId.tasks()) {
-            TaskService.TaskDto taskDto = TaskService.TaskDto.newBuilder()
-                    .setId(task.id())
-                    .setEmail(task.email())
-                    .setTitle(task.title())
-                    .setStatus(task.status().name())
-                    .build();
-            response.addTasks(taskDto);
+            response.addTasks(TaskGrpcMapper.toProto(task));
         }
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();
