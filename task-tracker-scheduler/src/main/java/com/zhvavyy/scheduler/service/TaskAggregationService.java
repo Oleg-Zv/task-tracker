@@ -1,7 +1,7 @@
 package com.zhvavyy.scheduler.service;
 
-import com.my.grpc.task.TaskService;
 
+import com.zhvavyy.backend.grpc.TaskServiceScheduleProto;
 import com.zhvavyy.scheduler.dto.Statuses;
 import com.zhvavyy.scheduler.kafka.messaging.dto.MessageForEmail;
 import lombok.RequiredArgsConstructor;
@@ -23,31 +23,31 @@ public class TaskAggregationService {
 
     public List<MessageForEmail> buildUserTasksReport(){
         List<Long> usersId = userReportService.getUsersId();
-        Map<Long,List<TaskService.TaskDto>> tasksUserMap = getUserTasks(usersId);
+        Map<Long,List<TaskServiceScheduleProto.TaskDto>> tasksUserMap = getUserTasks(usersId);
         Map<Long, Map<String, Integer>> stats = countStatuses(tasksUserMap);
         Map<Long, Statuses> report = formingReports(tasksUserMap);
         return formingDto(report,stats,tasksUserMap);
     }
 
 
-    public Map<Long,List<TaskService.TaskDto>> getUserTasks(List<Long>usersId){
-      Map<Long, List<TaskService.TaskDto>> userTasksMap= new HashMap<>();
+    public Map<Long,List<TaskServiceScheduleProto.TaskDto>> getUserTasks(List<Long>usersId){
+      Map<Long, List<TaskServiceScheduleProto.TaskDto>> userTasksMap= new HashMap<>();
       for(Long userId: usersId){
-          List<TaskService.TaskDto>tasks = grpcTaskClientService.getResponseTask(userId);
+          List<TaskServiceScheduleProto.TaskDto>tasks = grpcTaskClientService.getResponseTask(userId);
           userTasksMap.put(userId,tasks);
       }
       return userTasksMap;
     }
 
 
-    public Map<Long,Map<String,Integer>> countStatuses(Map<Long,List<TaskService.TaskDto>> tasksUserMap){
+    public Map<Long,Map<String,Integer>> countStatuses(Map<Long,List<TaskServiceScheduleProto.TaskDto>> tasksUserMap){
         Map<Long, Map<String, Integer>> result = new HashMap<>();
 
-        for(Map.Entry<Long,List<TaskService.TaskDto>>entry: tasksUserMap.entrySet()) {
+        for(Map.Entry<Long,List<TaskServiceScheduleProto.TaskDto>>entry: tasksUserMap.entrySet()) {
             int done = 0;
             int pending = 0;
 
-            for (TaskService.TaskDto task : entry.getValue()) {
+            for (TaskServiceScheduleProto.TaskDto task : entry.getValue()) {
                 if (STATUS_DONE.equals(task.getStatus())) done++;
                 else if (STATUS_PENDING.equals(task.getStatus())) pending++;
             }
@@ -62,22 +62,22 @@ public class TaskAggregationService {
        return result;
     }
 
-    public Map<Long,Statuses> formingReports(Map<Long,List<TaskService.TaskDto>> tasksUserMap) {
+    public Map<Long,Statuses> formingReports(Map<Long,List<TaskServiceScheduleProto.TaskDto>> tasksUserMap) {
         Map<Long, Statuses> reports = new HashMap<>();
 
-        for (Map.Entry<Long, List<TaskService.TaskDto>> entry : tasksUserMap.entrySet()) {
+        for (Map.Entry<Long, List<TaskServiceScheduleProto.TaskDto>> entry : tasksUserMap.entrySet()) {
             StringBuilder bodyDone = new StringBuilder();
             StringBuilder bodyPending = new StringBuilder();
             StringBuilder bodyCombined = new StringBuilder();
 
 
-            List<TaskService.TaskDto> done =
+            List<TaskServiceScheduleProto.TaskDto> done =
                     entry.getValue().stream()
                             .filter(t -> t.getStatus().equals(STATUS_DONE))
                             .limit(5)
                             .toList();
 
-            List<TaskService.TaskDto> pending =
+            List<TaskServiceScheduleProto.TaskDto> pending =
                     entry.getValue().stream()
                             .filter(t -> t.getStatus().equals(STATUS_PENDING))
                             .limit(5)
@@ -107,12 +107,12 @@ public class TaskAggregationService {
 
     public List<MessageForEmail> formingDto(Map<Long, Statuses> reportMap,
                                             Map<Long, Map<String, Integer>> statusesMap,
-                                            Map<Long, List<TaskService.TaskDto>> tasksUserMap) {
+                                            Map<Long, List<TaskServiceScheduleProto.TaskDto>> tasksUserMap) {
 
         List<MessageForEmail> message = new ArrayList<>();
 
         for (Long userId : tasksUserMap.keySet()) {
-            List<TaskService.TaskDto> tasks = tasksUserMap.get(userId);
+            List<TaskServiceScheduleProto.TaskDto> tasks = tasksUserMap.get(userId);
             if (tasks.isEmpty()) continue;
 
             String email = tasks.get(0).getEmail();

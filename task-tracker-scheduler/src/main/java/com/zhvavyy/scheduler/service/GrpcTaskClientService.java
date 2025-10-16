@@ -1,7 +1,8 @@
 package com.zhvavyy.scheduler.service;
 
-import com.my.grpc.task.TaskService;
-import com.my.grpc.task.TaskServiceScheduleGrpc;
+
+import com.zhvavyy.backend.grpc.TaskServiceScheduleGrpc;
+import com.zhvavyy.backend.grpc.TaskServiceScheduleProto;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,8 @@ public class GrpcTaskClientService {
     private TaskServiceScheduleGrpc.TaskServiceScheduleBlockingStub stub;
 
 
-    public List<TaskService.TaskDto> getResponseTask(Long userId){
-        TaskService.SchedulerTasksRequest request= TaskService.SchedulerTasksRequest
+    public List<TaskServiceScheduleProto.TaskDto> getResponseTask(Long userId){
+        TaskServiceScheduleProto.SchedulerTasksRequest request= TaskServiceScheduleProto.SchedulerTasksRequest
                 .newBuilder()
                 .setId(userId)
                 .build();
