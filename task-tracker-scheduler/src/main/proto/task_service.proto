@@ -1,6 +1,9 @@
 syntax = "proto3";
 package com.my.grpc.task;
 
+option java_package = "com.zhvavyy.backend.grpc";
+option java_outer_classname = "TaskServiceScheduleProto";
+
 message SchedulerTasksRequest{
   int64 id =1;
 }
