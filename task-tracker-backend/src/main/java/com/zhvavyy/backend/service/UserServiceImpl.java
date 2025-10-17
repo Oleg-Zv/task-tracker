@@ -1,7 +1,7 @@
 package com.zhvavyy.backend.service;
 
 import com.zhvavyy.backend.dto.CurrentUserDto;
-import com.zhvavyy.backend.dto.UserCreateDto;
+import com.zhvavyy.backend.dto.UserUpdateDto;
 import com.zhvavyy.backend.dto.UserFilterDto;
 import com.zhvavyy.backend.dto.UserReadDto;
 import com.zhvavyy.backend.exception.UnauthorizedException;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     public CurrentUserDto getUser(UserDetails userDetails) {
         return userRepository.findByEmail(userDetails.getUsername())
                 .map(currentUserMapper::mapTo)
-                .orElseThrow(()-> new UnauthorizedException("Unauthorize user"));
+                .orElseThrow(()-> new UnauthorizedException("Unauthorized user: "+ userDetails.getUsername()));
 
     }
 
@@ -67,21 +67,22 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Optional<UserReadDto> update(Long id, UserCreateDto createDto) {
+    public UserReadDto update(Long id, UserUpdateDto createDto) {
        return userRepository.findById(id)
                .map(entity-> userCreateMapper.mapTo(createDto,entity))
                .map(userRepository::saveAndFlush)
-               .map(userMapper::mapTo);
+               .map(userMapper::mapTo)
+               .orElseThrow(()-> new UserNotFoundCustomException("User not found with id: "+ id));
 
     }
 
     @Transactional
     @Override
     public void delete(Long id) {
-        if(!userRepository.existsById(id)){
-            throw new UserNotFoundCustomException("user not fount with id: "+id);
-        }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow((() -> new UserNotFoundCustomException("User not found with id: " + id)));
+        userRepository.delete(user);
+
     }
 
     @Override
