@@ -36,7 +36,7 @@ services:
 
 
   task-tracker-backend:
-    image: olegzv13/backend:4.7.3
+    image: olegzv13/backend:4.7.4
     ports:
       - "8080:8080"
     depends_on:
