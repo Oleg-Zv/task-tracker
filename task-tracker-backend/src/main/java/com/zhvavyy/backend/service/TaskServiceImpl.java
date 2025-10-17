@@ -16,13 +16,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.security.access.AccessDeniedException;
+import java.time.Instant;
 import java.util.List;
 
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TaskServiceImpl implements TaskService {
 
     TaskRepository taskRepository;
@@ -33,15 +35,15 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Override
     public void delete(Long id) {
-       taskRepository.findById(id)
-              .ifPresentOrElse(taskRepository::delete,
-             ()->{ throw new TaskNotFoundException("task not found with id: "+id);});
+        taskRepository.findById(id)
+                .ifPresentOrElse(taskRepository::delete,
+                        () -> {throw new TaskNotFoundException("task not found with id: " + id);});
     }
 
     @Override
     public Page<TaskReadDto> getAll(Pageable pageable) {
-        return taskRepository.findAll(pageable)
-                .map(taskMapper::mapTo);
+      return taskRepository.findAll(pageable)
+              .map(taskMapper::mapTo);
     }
 
     @Override
@@ -54,14 +56,14 @@ public class TaskServiceImpl implements TaskService {
     public TaskReadDto add(TaskCreateDto taskDto, CustomUserDetails userDetails) {
         Task task = taskCreateMapper.mapTo(taskDto);
         task.setUser(userDetails.getUser());
-         return taskMapper
-                 .mapTo(taskRepository.save(task));
+        return taskMapper
+                .mapTo(taskRepository.save(task));
     }
 
     @Override
     public TaskResponse findAllByUserId(Long userId) {
         List<TaskDto> tasks = taskRepository.findAllByUserId(userId)
-                .stream().map(task -> new TaskDto(task.getId(),task.getUser().getEmail(),task.getTitle(),task.getStatus()))
+                .stream().map(task -> new TaskDto(task.getId(), task.getUser().getEmail(), task.getTitle(), task.getStatus()))
                 .toList();
         return new TaskResponse(tasks);
     }
@@ -69,39 +71,20 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskReadDto markAsDone(Long id, CustomUserDetails userDetails) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена"));
-
-        if (!task.getUser().getId().equals(userDetails.getUser().getId())) {
-            throw new SecurityException("Нет доступа к задаче");
-        }
-        task.setStatus(Status.DONE);
-        taskRepository.save(task);
-
-        return taskMapper.mapTo(task);
+        return changeStatus(id, userDetails, Status.DONE);
     }
 
     @Override
     @Transactional
     public TaskReadDto markAsPending(Long id, CustomUserDetails userDetails) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Задача не найдена"));
-
-        if (!task.getUser().getId().equals(userDetails.getUser().getId())) {
-            throw new SecurityException("Нет доступа к задаче");
-        }
-        task.setStatus(Status.PENDING);
-        task.setDoneAt(null);
-        taskRepository.save(task);
-
-        return taskMapper.mapTo(task);
+        return changeStatus(id, userDetails, Status.PENDING);
     }
 
     @Override
     @Transactional
     public TaskReadDto changeTask(Long id, TaskUpdate taskUpdate) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("Задача с id " + id + " не найдена"));
+                .orElseThrow(() -> new TaskNotFoundException("Task with id:" + id + " not found"));
 
         if (taskUpdate.title() != null) task.setTitle(taskUpdate.title());
         if (taskUpdate.description() != null) task.setDescription(taskUpdate.description());
@@ -109,17 +92,31 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.mapTo(taskRepository.save(task));
     }
 
-
-
     @Override
     public Page<TaskReadDto> findAllByStatus(Status status, Pageable pageable) {
-        return  taskRepository.findAllByStatus(status,pageable)
+        return taskRepository.findAllByStatus(status, pageable)
                 .map(taskMapper::mapTo);
     }
 
-    private TaskReadDto getByIdOrThrow(Long id){
+    private TaskReadDto changeStatus(Long id, CustomUserDetails userDetails, Status status) {
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+
+        if (!task.getUser().getId().equals(userDetails.getUser().getId())) {
+            throw new AccessDeniedException("No access right");
+        }
+        task.setStatus(status);
+        if (status == Status.PENDING) task.setDoneAt(null);
+        else task.setDoneAt(Instant.now());
+
+        taskRepository.save(task);
+
+        return taskMapper.mapTo(task);
+    }
+
+    private TaskReadDto getByIdOrThrow(Long id) {
         return taskRepository.findById(id)
                 .map(taskMapper::mapTo)
-                .orElseThrow(()->new TaskNotFoundException("Task not found with id " +id));
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with id " + id));
     }
 }
