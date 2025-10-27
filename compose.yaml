@@ -24,7 +24,7 @@ services:
           - database
 
   task-tracker-email-sender:
-    image: olegzv13/email-sender:2.5
+    image: olegzv13/email-sender:2.5.RELEASE
     depends_on:
       - kafka
     secrets:
@@ -36,7 +36,7 @@ services:
 
 
   task-tracker-backend:
-    image: olegzv13/backend:4.7.4
+    image: olegzv13/backend:4.7.4.RELEASE
     ports:
       - "8080:8080"
     depends_on:
@@ -55,7 +55,7 @@ services:
 
 
   task-tracker-scheduler:
-    image: olegzv13/scheduler:1.7.1
+    image: olegzv13/scheduler:1.7.2.RELEASE
     depends_on:
       - kafka
       - task-tracker-backend
@@ -64,7 +64,7 @@ services:
 
 
   task-tracker-frontend:
-    image: olegzv13/frontend:4.0
+    image: olegzv13/frontend:4.0.RELEASE
     ports:
       - "80:80"
     depends_on:
@@ -93,7 +93,7 @@ services:
       - KAFKA_LOG_RETENTION_HOURS=100
       - KAFKA_NUM_PARTITIONS=4
       - KAFKA_DELETE_TOPIC_ENABLE=true
-      - ALLOW_PLAINTEXT_LISTENER=yes #заменить
+      - ALLOW_PLAINTEXT_LISTENER=yes #заменить на SSL/TLS
       - KAFKA_CREATE_TOPICS=EMAIL_SENDING_TASKS:3:1, USER_REGISTRATION:3:1
 
     volumes:
