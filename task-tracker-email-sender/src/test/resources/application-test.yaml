@@ -1,0 +1,43 @@
+spring:
+  mail:
+#    username: test
+#    password: test
+    protocol: smtp
+    from: argumentoleg@gmail.com
+    properties:
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
+
+
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  sql:
+    init:
+      mode: never
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-test.yaml
+
+  kafka:
+   producer:
+     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+   consumer:
+     group-id: "test-group-consumer"
+     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+     value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+     properties:
+       spring.json.trusted.packages: "*"
+       spring.json.type.mapping: >
+         com.zhvavyy.backend.kafka.messaging.dto.MessageForEmail:com.zhvavyy.sender.dto.MessageForEmail,
+         com.zhvavyy.scheduler.kafka.messaging.dto.MessageForEmail:com.zhvavyy.sender.dto.MessageForEmail
+app:
+  kafka:
+    topics:
+      user-registration: "user-registration"
+      email-sending: "email-sending"
