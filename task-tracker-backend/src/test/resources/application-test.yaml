@@ -1,0 +1,77 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  sql:
+    init:
+      mode: never
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-test.yaml
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: "test-group-consumer"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+app:
+  kafka:
+    topics:
+      user-registration: "user-registration"
+logging:
+  level:
+    com.zhvavyy.backend: DEBUG
+    org.testcontainers: INFO
+jwt:
+  # Source: test-public.pem
+  public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqewtYF3U8H3w5IFfCNZ6
+tgCSuXNv1ZOeH0jDLLVaoBHHDwra4hRRwJMP3Xc17IkKSUXBq34rrPQ8IHV2UMqF
+wK+miOhHYaer1aw94em0zqIvr1rOZ7bVx2ztTofqqmFdpd5m5TgXbqEwVwXzsvn7
+6DerW5EqJa3p1EiZ8e6UwqVe8RF5zCotgKCD+KzmmrJ8IyNaWf1EALZ5+jyBeUWu
+AY0IbnnPBZkUuQPEVuWFx4QInYlqwBfi3QSE2od80V40pi61iUJJIcK9+cMWJZWg
+JKJIPh7+xr1UG16DaDKyNG0T5t0V9rftpF0KCOU0XPclmCG1IGdILn1KQCgz0YyW
+tQIDAQAB"
+
+  # Source: test-private.pem
+  private-key: "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCp7C1gXdTwffDk
+gV8I1nq2AJK5c2/Vk54fSMMstVqgEccPCtriFFHAkw/ddzXsiQpJRcGrfius9Dwg
+dXZQyoXAr6aI6Edhp6vVrD3h6bTOoi+vWs5nttXHbO1Oh+qqYV2l3mblOBduoTBX
+BfOy+fvoN6tbkSolrenUSJnx7pTCpV7xEXnMKi2AoIP4rOaasnwjI1pZ/UQAtnn6
+PIF5Ra4BjQhuec8FmRS5A8RW5YXHhAidiWrAF+LdBITah3zRXjSmLrWJQkkhwr35
+wxYllaAkokg+Hv7GvVQbXoNoMrI0bRPm3RX2t+2kXQoI5TRc9yWYIbUgZ0gufUpA
+KDPRjJa1AgMBAAECggEAG0Cs2mrSLywTyaJSKqmzjqMy5Rl1k0yUrLHP08jWWxve
+0DPOfToDDp7HiZ6IAILOKohMkoOu35NgXVhZfIWuxAOn8wdGA4yPy7pPRn9kJ0vt
+1/L5bbruOIjo2pKD+YWaLnMoD5VadLzXcu2ac1cSpuDe09XJa7ej7A8k2Z+JLlpy
+FQTaKM1dmQAYAJH2ZL0aihWlhTbprFA7QNmiW6XDcNpGNG7it/tkHiKnX3gS8iZh
+f8CJT9YGTd3BqmyL/+Vc2TLADm9H05WQYbcFtE5Z30BlWyEgbZCHmztbajOMSgEB
+/oopcKBLXzh107zbA4OvHJWloofI+jGL7jvi/NNv1QKBgQDtStWj4T/GeE3PUM5O
+4CbHUXQ0wF8TQASw3xmtGGRsf6zedfFAvuCtNS0mUHzwT3zhJ4NcUOjXLMUZmrfg
++BfSY+KLGFCSIxZa7AE4OfefM444Tq/rHI9cDxbTuNBInbmZOxUks2LBo+0k9rHx
++wF1jxO7Bdxnnkun+liXG2Q33wKBgQC3UaYeT3dpJHxHxVDrAdipqOJgQFg+joZM
+HKYZr+kMJ2byDtECbjjgecLBVmGCu+xGN/1PrGe3o/iaz5/pF+iGMaXvCKVg5tHl
+J1hTFh24IO4mf/76wbU8IJGpjutmXD2lyonDdKJzpJKNKuFI8xnjkJ9yV5diLvRH
+jdWfX5BT6wKBgQCwkLeJOqkWyBu1wH3SyQ1x0FU0j1PvYfpblZZoazcGWLZLzdzW
+/XD20ROoZ8mfkrXsX1dqULYArkp2894Q4unu3e4K6+u/4aXXv7ZknRV4+4a+tSZH
+PrgZmwy0O9eXwO0CbKkd5vD7/zsM/xeHY+tBC1Z2GjVXUL0g37Idtf8LZwKBgQCo
+B5ATglV6q3W7N3J3JocY4/MztGbuWCdjBnN9Yg9kE42527ja2HsLzq+kFXBlq6jj
+qBho+idLXWHXTO5PcpmwvztQgYVM7+V+fPTpm4D8MDr6USI/aGSdy2CYoabFeVEM
+cTybSoJJK5UlDiPXgPS+8OYloYHh/hXsrGYdojOhpwKBgHg39PafekowkOxwmocn
+aswMOiW14+94yHtO0E+6FCvqZla2UXyiRdbYQOL9aGJf+T1TsJOz/4zhEUQiWPBX
+0pFYZgHWAukFkVQw1enKzboAHbqF5ZhOlgxufZxSM9fFL4a12T6XgR0G6zEjPID6
+x+stel7BxVZzI4063pP1yM1B"
+  access-expiration: 3600000
+  refresh-expiration: 86400000
+
+grpc:
+  server:
+    enabled: true
+    port: -1
+    in-process-name: test-server
