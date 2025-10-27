@@ -1,3 +1,5 @@
-#databaseChangeLog:
-#  - include:
-#      file: classpath:db/changelog/db.changelog-29-09-2025-insert.test.sql
+databaseChangeLog:
+  - include:
+      file: classpath:db/changelog/db.changelog-21-10-2025-create-test-table.sql
+  - include:
+      file: classpath:db/changelog/db.changelog-29-09-2025-insert.test.sql
