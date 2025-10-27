@@ -10,7 +10,7 @@ spring:
 
 task:
   cron:
-    expression: 0 */1 * * * *
+    expression: 0 0 0 * * *
 
 app:
   kafka:

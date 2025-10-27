@@ -53,8 +53,8 @@ dependencies {
 
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
-	implementation 'com.fasterxml.jackson.core:jackson-core:2.20.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.0'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.19.0'
 	implementation 'org.springframework.kafka:spring-kafka:3.3.10'
 	implementation 'org.springframework.amqp:spring-amqp:3.2.5'
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -81,12 +81,19 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE'
+
+	testImplementation 'io.grpc:grpc-testing:1.63.0'
+	testImplementation 'io.grpc:grpc-inprocess:1.63.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.testcontainers:kafka'
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'com.h2database:h2:2.3.232'
 	testImplementation 'org.testcontainers:postgresql'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 tasks.withType(JavaCompile) {
 	options.annotationProcessorGeneratedSourcesDirectory = file("$buildDir/generated/sources/annotationProcessor/java/main")

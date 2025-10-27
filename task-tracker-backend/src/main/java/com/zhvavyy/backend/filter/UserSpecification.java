@@ -2,7 +2,6 @@ package com.zhvavyy.backend.filter;
 
 import com.zhvavyy.backend.dto.UserFilterDto;
 import com.zhvavyy.backend.model.User;
-import com.zhvavyy.backend.model.enums.Role;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
@@ -23,7 +22,6 @@ public class UserSpecification {
 
             addPredicateIfNotNull(predicates,cb,root.get(user.role.getMetadata().getName()), filterDto.role());
             addPredicateIfNotNull(predicates,cb,root.get(user.email.getMetadata().getName()), filterDto.email());
-            predicates.add(cb.notEqual(root.get(user.role.getMetadata().getName()), Role.ADMIN));
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };

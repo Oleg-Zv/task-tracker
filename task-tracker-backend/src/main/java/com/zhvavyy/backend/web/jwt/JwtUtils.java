@@ -33,7 +33,6 @@ public class JwtUtils{
                        .collect(Collectors.toList()))
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plus(15, ChronoUnit.MINUTES))
-
                 .build();
 
         Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims));

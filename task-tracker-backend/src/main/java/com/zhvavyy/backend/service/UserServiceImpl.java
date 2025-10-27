@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
        return users.map(userMapper::mapTo);
     }
 
+    @Override
     public UserReadDto findById(Long id) {
         return getOrThrow(userRepository.findById(id)
                         .map(userMapper::mapTo),

@@ -29,11 +29,18 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.20.0'
 	implementation 'org.springframework.kafka:spring-kafka:3.3.10'
 	implementation 'org.springframework.boot:spring-boot-starter-mail:3.5.6'
-	implementation 'org.springframework.amqp:spring-amqp:3.2.5'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'com.icegreen:greenmail-junit5:1.6.13'
+	testImplementation 'com.icegreen:greenmail:2.0.0'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.testcontainers:kafka'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
