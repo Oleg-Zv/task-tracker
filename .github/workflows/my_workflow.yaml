@@ -65,3 +65,22 @@ jobs:
              ${{ secrets.DOCKER_HUB_OWNER }}/scheduler:${{ env.BUILD_PACKAGE_NAME }}
              ${{ secrets.DOCKER_HUB_OWNER }}/scheduler:latest
 
+
+  deploy:
+    needs: build-and-push-images
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy with SSH
+        uses: appleboy/ssh-action@master
+        with:
+           host: ${{ secrets.SERVER_HOST }}
+           username: ${{ secrets.SERVER_USERNAME }}
+           key: ${{ secrets.SERVER_SSH }}
+           script: |
+             cd /root
+             docker stack deploy -c compose.yaml my_app
+
