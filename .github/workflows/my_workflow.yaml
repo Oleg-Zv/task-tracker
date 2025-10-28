@@ -5,10 +5,10 @@ on:
     branches:
       - main
     paths:
-      - task-tracker-backend
-      - task-tracker-email-sender
-      - task-tracker-frontend
-      - task-tracker-scheduler
+      - 'task-tracker-backend/**'
+      - 'task-tracker-email-sender/**'
+      - 'task-tracker-frontend/**'
+      - 'task-tracker-scheduler/**'
 jobs:
   build-test:
     runs-on: ubuntu-latest
