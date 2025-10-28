@@ -10,65 +10,58 @@ on:
       - 'task-tracker-frontend/**'
       - 'task-tracker-scheduler/**'
 
-env:
- BUILD_PACKAGE_NAME: "git-${{ github.sha }}"
 jobs:
-  build-images:
+  build-and-push-images:
+    env:
+      BUILD_PACKAGE_NAME: "git-${{ github.sha }}"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build docker image backend
-        run: |
-             docker build \
-             -t ${{ secrets.DOCKER_HUB_OWNER }}/backend:${{ env.BUILD_PACKAGE_NAME}} \
-             -t olegzv13/backend:latest ./task-tracker-backend
-
-
-      - name: Build docker image email-sender
-        run: |
-             docker build  \
-             -t ${{ secrets.DOCKER_HUB_OWNER }}/email-sender:${{ env.BUILD_PACKAGE_NAME }} \
-             -t olegzv13/email-sender:latest ./task-tracker-email-sender
-
-
-      - name: Build docker image frontend
-        run: |
-             docker build \
-             -t ${{ secrets.DOCKER_HUB_OWNER }}/frontend:${{ env.BUILD_PACKAGE_NAME }} \
-             -t olegzv13/frontend:latest ./task-tracker-frontend
-
-
-      - name: Build docker image scheduler
-        run: |
-             docker build \
-             -t ${{ secrets.DOCKER_HUB_OWNER }}/scheduler:${{ env.BUILD_PACKAGE_NAME }} \
-             -t olegzv13/scheduler:latest ./task-tracker-scheduler
-
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs:
-      - build-images
-
-    steps:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_OWNER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Push Docker images
-        run: |
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/backend:${{env.BUILD_PACKAGE_NAME}}
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/backend:latest
+
+      - name: Build and push docker image backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./task-tracker-backend
+          push: true
+          tags: |
+              ${{ secrets.DOCKER_HUB_OWNER }}/backend:${{ env.BUILD_PACKAGE_NAME}}
+              ${{ secrets.DOCKER_HUB_OWNER }}/backend:latest
+             
+
+      - name: Build and push docker image email-sender
+        uses: docker/build-push-action@v5
+        with:
+          context: ./task-tracker-email-sender
+          push: true
+          tags: |
+              ${{ secrets.DOCKER_HUB_OWNER }}/email-sender:${{ env.BUILD_PACKAGE_NAME }}
+              ${{ secrets.DOCKER_HUB_OWNER }}/email-sender:latest
           
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/email-sender:${{env.BUILD_PACKAGE_NAME}}
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/email-sender:latest
-          
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/frontend:${{env.BUILD_PACKAGE_NAME}}
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/frontend:latest
-          
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/scheduler:${{env.BUILD_PACKAGE_NAME}}
-          docker push ${{ secrets.DOCKER_HUB_OWNER }}/scheduler:latest
+
+      - name: Build and push docker image frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./task-tracker-frontend
+          push: true
+          tags: |
+             ${{ secrets.DOCKER_HUB_OWNER }}/frontend:${{ env.BUILD_PACKAGE_NAME }}
+             ${{ secrets.DOCKER_HUB_OWNER }}/frontend:latest
+        
+
+      - name: Build and push docker image scheduler
+        uses: docker/build-push-action@v5
+        with:
+          context: ./task-tracker-scheduler
+          push: true
+          tags: |
+             ${{ secrets.DOCKER_HUB_OWNER }}/scheduler:${{ env.BUILD_PACKAGE_NAME }}
+             ${{ secrets.DOCKER_HUB_OWNER }}/scheduler:latest
+
