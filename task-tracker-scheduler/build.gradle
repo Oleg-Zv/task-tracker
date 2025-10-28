@@ -58,7 +58,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-
     testImplementation 'io.grpc:grpc-testing:1.63.0'
     testImplementation 'io.grpc:grpc-inprocess:1.63.0'
     testImplementation 'com.icegreen:greenmail-junit5:1.6.13'
