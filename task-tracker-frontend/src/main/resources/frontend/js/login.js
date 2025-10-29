@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "http://217.114.14.212:8080";
 
 $(function () {
     $("#login-btn").click(function (e) {

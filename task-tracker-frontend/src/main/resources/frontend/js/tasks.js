@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "http://217.114.14.212:8080";
+
 let token = localStorage.getItem("jwt");
 let email = localStorage.getItem("email");
 let currentTaskId = null;
