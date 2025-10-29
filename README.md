@@ -1,6 +1,9 @@
 ## 📝 Task Tracker – Многопользовательский планировщик задач
 <br>
+
 **Task Tracker** — это современный многопользовательский планировщик задач с микросервисной архитектурой.  
+
+<br>
 
 
 ---
@@ -88,10 +91,12 @@ docker stack deploy -c docker-compose.yml "ваше название"
 [🌐 Перейти к приложению](http://217.114.14.212/login.html)
 
 
+---
+
 ## 🛠️ Технологический стек
 
 ### ☕ Backend
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" width="20"/> **Java 21+**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" width="20"/> **Java 17+**
 - <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" width="20"/> **Spring Boot 3+**
 - <img src="https://img.icons8.com/ios-filled/50/000000/lock-2.png" width="20"/> **Spring Security / JWT (RSA-ключи)**
 - <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hibernate/hibernate-original.svg" width="20"/> **Spring Data JPA / Hibernate**
