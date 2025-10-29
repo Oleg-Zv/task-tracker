@@ -5,45 +5,92 @@ body {
     padding: 0;
 }
 
-/* Шапка */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #1e293b;
     color: white;
-    padding: 12px 24px;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-/* Контейнер задач */
+.header-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.header-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    min-height: 40px;
+    white-space: nowrap;
+}
+
+.header-btn:hover {
+    background: #1d4ed8;
+}
+
 #tasks-container {
     max-width: 700px;
-    margin: 40px auto;
+    margin: 20px auto;
     background: white;
     border-radius: 12px;
-    padding: 20px 30px;
+    padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .task-section {
     margin-bottom: 24px;
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.section-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1f2937;
+}
+
+.toggle-icon {
+    font-size: 16px;
+    color: #6b7280;
+    transition: transform 0.3s ease;
+}
+
 .task-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-/* Элемент задачи */
+
 .task-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #f9fafb;
-    padding: 10px 14px;
+    padding: 16px 14px;
     margin-bottom: 8px;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: background 0.2s;
+    min-height: 60px;
+    border: 1px solid #e5e7eb;
 }
 
 .task-item:hover {
@@ -54,59 +101,86 @@ body {
     flex: 1;
     color: #111827;
     font-weight: 500;
+    font-size: 16px;
+    padding-right: 10px;
 }
 
-/* Кнопки */
 .task-btn {
     background-color: #2563eb;
     color: white;
     border: none;
-    padding: 6px 12px;
+    padding: 10px 16px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.2s;
+    min-height: 44px;
 }
 
 .task-btn:hover {
     background-color: #1d4ed8;
 }
 
-/* Добавление задачи */
 .add-task {
     border-top: 1px solid #ddd;
     padding-top: 20px;
+    margin-top: 20px;
 }
 
 .add-task input,
 .add-task textarea {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 6px;
+    margin-bottom: 12px;
+    padding: 14px 12px;
+    border-radius: 8px;
     border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.add-task textarea {
+    min-height: 80px;
+    resize: vertical;
 }
 
 .add-task button {
     background-color: #059669;
     color: white;
-    padding: 10px 14px;
+    padding: 14px 20px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    min-height: 50px;
+    width: 100%;
 }
 
 .add-task button:hover {
     background-color: #047857;
 }
 
-/* --- Красивое оформление модалки --- */
+#taskModal .modal-dialog {
+    margin: 20px auto;
+    max-width: 95vw;
+}
+
 #taskModal .modal-content {
-    background-color: #f3f4f6; /* мягкий светло-серый фон */
-    color: #111827; /* чёткий тёмный текст */
+    background-color: #f3f4f6;
+    color: #111827;
     border-radius: 16px;
     border: none;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#taskModal .modal-header {
+    border-bottom: 1px solid #d1d5db;
+    padding: 20px 24px;
+}
+
+#taskModal .modal-body {
+    padding: 24px;
 }
 
 #taskModal .modal-body input,
@@ -116,6 +190,16 @@ body {
     color: #111827;
     border-radius: 8px;
     transition: all 0.2s;
+    padding: 16px 14px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+}
+
+#taskModal .modal-body textarea {
+    min-height: 100px;
+    resize: vertical;
 }
 
 #taskModal .modal-body input:focus,
@@ -124,22 +208,174 @@ body {
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
-/* Кнопки в модалке */
+#taskModal .modal-footer {
+    border-top: 1px solid #d1d5db;
+    padding: 20px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 #taskModal .modal-footer .btn {
     border-radius: 8px;
     font-weight: 500;
     transition: transform 0.1s ease-in-out;
+    padding: 12px 18px;
+    font-size: 15px;
+    min-height: 48px;
+    flex: 1;
+    min-width: 120px;
 }
 
 #taskModal .modal-footer .btn:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
-/* Анимация появления модалки */
 .modal.fade .modal-dialog {
     transition: transform 0.25s ease-out;
     transform: translateY(-20px);
 }
 .modal.show .modal-dialog {
     transform: translateY(0);
+}
+
+
+
+@media (max-width: 768px) {
+    #tasks-container {
+        margin: 15px;
+        padding: 16px;
+    }
+
+    .task-item {
+        padding: 14px 12px;
+        min-height: 56px;
+    }
+
+    .header {
+        padding: 10px 12px;
+    }
+
+    .header-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-height: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-bottom: 20px;
+    }
+
+    #tasks-container {
+        margin: 10px;
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .header-buttons {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .header-btn {
+        flex: 1;
+        margin: 0 2px;
+        font-size: 12px;
+        padding: 8px 6px;
+    }
+
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .task-title {
+        padding-right: 0;
+        font-size: 15px;
+    }
+
+    .task-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    #taskModal .modal-dialog {
+        margin: 10px;
+        max-width: calc(100vw - 20px);
+    }
+
+    #taskModal .modal-content {
+        max-height: calc(100vh - 20px);
+    }
+
+    #taskModal .modal-footer {
+        flex-direction: column;
+    }
+
+    #taskModal .modal-footer .btn {
+        width: 100%;
+        margin: 2px 0;
+    }
+}
+
+@media (max-width: 360px) {
+    #tasks-container {
+        margin: 8px;
+        padding: 10px;
+    }
+
+    .task-item {
+        padding: 14px;
+    }
+
+    .add-task input,
+    .add-task textarea {
+        padding: 12px 10px;
+    }
+
+    .header-btn {
+        font-size: 11px;
+        padding: 6px 4px;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    #taskModal .modal-content {
+        max-height: 80vh;
+    }
+
+    #taskModal .modal-body {
+        padding: 16px 20px;
+    }
+
+    .task-item {
+        padding: 12px 14px;
+        min-height: 50px;
+    }
+}
+
+#status-toast {
+    position: fixed;
+    top: 80px !important;
+    right: 50% !important;
+    transform: translateX(50%) !important;
+    padding: 14px 20px !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    z-index: 9999 !important;
+    display: none !important;
+    max-width: 90vw !important;
+    text-align: center !important;
+    font-size: 15px !important;
 }

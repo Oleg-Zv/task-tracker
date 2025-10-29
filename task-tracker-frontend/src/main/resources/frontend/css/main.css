@@ -1,4 +1,4 @@
-/* ==== Основной стиль для главной страницы ==== */
+
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -8,9 +8,11 @@ body {
     justify-content: center;
     align-items: center;
     color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-/* ==== Верхняя панель ==== */
+
 .header {
     position: absolute;
     top: 15px;
@@ -26,13 +28,15 @@ body {
 }
 
 .header button {
-    padding: 6px 12px;
+    padding: 8px 16px;
     border: none;
     border-radius: 8px;
     background: linear-gradient(90deg, #00c6ff, #0072ff);
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 14px;
+    min-height: 40px;
 }
 
 .header button:hover {
@@ -40,7 +44,7 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-/* ==== Основной блок с кнопками ==== */
+
 .buttons {
     display: flex;
     flex-direction: column;
@@ -52,10 +56,12 @@ body {
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     text-align: center;
     max-width: 90%;
+    width: 400px;
+    box-sizing: border-box;
 }
 
 .buttons button {
-    padding: 15px 25px;
+    padding: 18px 25px;
     font-size: 18px;
     border: none;
     border-radius: 10px;
@@ -63,6 +69,8 @@ body {
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-height: 60px;
+    font-weight: 600;
 }
 
 .buttons button:hover {
@@ -71,20 +79,150 @@ body {
     box-shadow: 0 6px 20px rgba(0,0,0,0.4);
 }
 
-/* ==== Адаптив для мобилок ==== */
-@media (max-width: 600px) {
+
+@media (max-width: 768px) {
+    .buttons {
+        padding: 35px 40px;
+        width: 350px;
+    }
+
+    .buttons button {
+        padding: 16px 22px;
+        font-size: 17px;
+        min-height: 58px;
+    }
+
+    .header {
+        right: 15px;
+        top: 12px;
+    }
+
+    .header button {
+        padding: 7px 14px;
+        min-height: 38px;
+        font-size: 13px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 80px;
+    }
+
+    .buttons {
+        padding: 30px 25px;
+        width: 100%;
+        max-width: 100%;
+        gap: 18px;
+    }
+
+    .buttons button {
+        padding: 20px 25px;
+        font-size: 18px;
+        min-height: 64px;
+        border-radius: 12px;
+    }
+
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(15, 32, 39, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 12px 15px;
+        justify-content: space-between;
+        z-index: 1000;
+        flex-direction: row;
+    }
+
+    .header span {
+        font-size: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
+    }
+
+    .header button {
+        padding: 10px 16px;
+        min-height: 44px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+}
+
+
+@media (max-width: 360px) {
+    body {
+        padding: 10px;
+        padding-top: 70px;
+    }
+
     .buttons {
         padding: 25px 20px;
         gap: 15px;
     }
+
     .buttons button {
-        font-size: 16px;
-        padding: 12px 20px;
+        padding: 18px 22px;
+        font-size: 17px;
+        min-height: 60px;
     }
+
     .header {
-        flex-direction: column;
-        gap: 5px;
-        top: 10px;
-        right: 10px;
+        padding: 10px 12px;
+    }
+
+    .header span {
+        font-size: 14px;
+        max-width: 100px;
+    }
+
+    .header button {
+        padding: 8px 14px;
+        min-height: 40px;
+        font-size: 13px;
+    }
+}
+
+
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        padding-top: 70px;
+        padding-bottom: 20px;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        padding: 20px 25px;
+        gap: 15px;
+        margin: 10px auto;
+    }
+
+    .buttons button {
+        padding: 12px 20px;
+        min-height: 50px;
+        font-size: 16px;
+    }
+
+    .header {
+        padding: 8px 15px;
+    }
+}
+
+
+@media (min-width: 1200px) {
+    .buttons {
+        width: 450px;
+    }
+
+    .buttons button {
+        padding: 20px 30px;
+        font-size: 20px;
+        min-height: 65px;
     }
 }
