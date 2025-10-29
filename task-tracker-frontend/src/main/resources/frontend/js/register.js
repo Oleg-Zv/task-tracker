@@ -14,13 +14,11 @@ function register() {
     const password = $("#reg-password").val();
     const repeat = $("#reg-repeat").val();
 
-    // Проверка на пустые поля
     if (!firstname || !lastname || !email || !password || !repeat) {
         alert("Заполни все поля!");
         return;
     }
 
-    // Проверка длины полей
     if (firstname.length < 2 || firstname.length > 20) {
         alert("Имя должно быть от 2 до 20 символов!");
         return;
@@ -36,13 +34,11 @@ function register() {
         return;
     }
 
-    // Проверка совпадения паролей
     if (password !== repeat) {
         alert("Пароли не совпадают!");
         return;
     }
 
-    // Отправка запроса на регистрацию
     $.ajax({
         url: `${API_URL}/auth/signup`,
         method: "POST",

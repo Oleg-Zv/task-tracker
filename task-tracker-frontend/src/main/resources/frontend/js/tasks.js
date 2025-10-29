@@ -19,17 +19,14 @@ $(document).ready(function () {
     $("#add-task-btn").click(addTask);
     $("#back-btn").click(() => window.location.href = "index.html");
 
-    // Инициализация модалки
     taskModal = new bootstrap.Modal($("#taskModal"));
 
-    // Кнопки в модалке
     $("#modal-delete-btn").click(() => currentTaskId && deleteTask(currentTaskId));
     $("#modal-toggle-btn").click(() => currentTaskId && toggleTaskDone(currentTaskStatus !== "DONE"));
     $("#modal-edit-btn").click(enableEditing);
     $("#modal-save-btn").click(saveTaskChanges);
     $("#modal-cancel-btn").click(cancelEditing);
 
-    // Toggle списков
     $("#toggle-done").click(function() {
         $("#done-tasks").collapse('toggle');
         $(this).toggleClass("bi-caret-down-fill bi-caret-up-fill");
@@ -95,7 +92,6 @@ function addTask() {
             $("#new-task-title, #new-task-desc").val("");
             loadTasks();
 
-            // 🚀 Авто-разворачивание нужного списка
             if (createdTask.status === "PENDING") {
                 $("#pending-tasks").collapse('show');
                 $("#toggle-pending").removeClass("bi-caret-down-fill").addClass("bi-caret-up-fill");

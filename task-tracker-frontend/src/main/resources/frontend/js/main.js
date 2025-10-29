@@ -1,6 +1,5 @@
 const API_URL = "http://217.114.14.212:8080";
 
-// функция для получения актуального токена
 function getToken() {
     return localStorage.getItem("jwt");
 }
