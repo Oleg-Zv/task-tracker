@@ -7,6 +7,10 @@ $(function () {
     });
 });
 
+window.addEventListener('resize', () => {
+    document.body.style.height = window.innerHeight + 'px';
+});
+
 function register() {
     const firstname = $("#reg-firstname").val().trim();
     const lastname = $("#reg-lastname").val().trim();
@@ -57,7 +61,12 @@ function register() {
             window.location.href = "index.html";
         },
         error: function (xhr) {
-            alert("Ошибка регистрации: " + xhr.responseText);
+            let message = "Ошибка регистрации";
+
+            if (xhr.status === 409) {
+                message = "❌ Пользователь с таким email уже существует";
+            }
+            alert(message)
         }
     });
 }

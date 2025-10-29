@@ -3,15 +3,15 @@ body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
     padding: 20px;
     box-sizing: border-box;
+    transition: height 0.2s ease;
 }
-
 
 .header {
     position: absolute;
@@ -43,7 +43,6 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
-
 
 .buttons {
     display: flex;
@@ -85,22 +84,13 @@ body {
         padding: 35px 40px;
         width: 350px;
     }
-
     .buttons button {
         padding: 16px 22px;
         font-size: 17px;
-        min-height: 58px;
     }
-
     .header {
         right: 15px;
         top: 12px;
-    }
-
-    .header button {
-        padding: 7px 14px;
-        min-height: 38px;
-        font-size: 13px;
     }
 }
 
@@ -111,21 +101,17 @@ body {
         align-items: flex-start;
         padding-top: 80px;
     }
-
     .buttons {
         padding: 30px 25px;
         width: 100%;
         max-width: 100%;
         gap: 18px;
     }
-
     .buttons button {
         padding: 20px 25px;
         font-size: 18px;
-        min-height: 64px;
         border-radius: 12px;
     }
-
     .header {
         position: fixed;
         top: 0;
@@ -136,9 +122,7 @@ body {
         padding: 12px 15px;
         justify-content: space-between;
         z-index: 1000;
-        flex-direction: row;
     }
-
     .header span {
         font-size: 15px;
         white-space: nowrap;
@@ -146,83 +130,14 @@ body {
         text-overflow: ellipsis;
         max-width: 120px;
     }
-
-    .header button {
-        padding: 10px 16px;
-        min-height: 44px;
-        font-size: 14px;
-        border-radius: 10px;
-    }
 }
 
-
-@media (max-width: 360px) {
+@media (max-height: 500px) {
     body {
-        padding: 10px;
-        padding-top: 70px;
-    }
-
-    .buttons {
-        padding: 25px 20px;
-        gap: 15px;
-    }
-
-    .buttons button {
-        padding: 18px 22px;
-        font-size: 17px;
-        min-height: 60px;
-    }
-
-    .header {
-        padding: 10px 12px;
-    }
-
-    .header span {
-        font-size: 14px;
-        max-width: 100px;
-    }
-
-    .header button {
-        padding: 8px 14px;
-        min-height: 40px;
-        font-size: 13px;
-    }
-}
-
-
-@media (max-height: 500px) and (orientation: landscape) {
-    body {
-        padding-top: 70px;
-        padding-bottom: 20px;
         align-items: flex-start;
     }
-
     .buttons {
-        padding: 20px 25px;
-        gap: 15px;
-        margin: 10px auto;
-    }
-
-    .buttons button {
-        padding: 12px 20px;
-        min-height: 50px;
-        font-size: 16px;
-    }
-
-    .header {
-        padding: 8px 15px;
-    }
-}
-
-
-@media (min-width: 1200px) {
-    .buttons {
-        width: 450px;
-    }
-
-    .buttons button {
-        padding: 20px 30px;
-        font-size: 20px;
-        min-height: 65px;
+        padding: 20px;
+        margin-top: 10px;
     }
 }

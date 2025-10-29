@@ -37,7 +37,7 @@ $(document).ready(function () {
         $(this).toggleClass("bi-caret-down-fill bi-caret-up-fill");
     });
 
-    // Изначально списки скрыты
+
     $("#done-tasks, #pending-tasks").collapse('hide');
 
     loadTasks();
@@ -78,9 +78,17 @@ function renderTasks(tasks) {
 function addTask() {
     const title = $("#new-task-title").val().trim();
     const description = $("#new-task-desc").val().trim();
-    if (!title) { alert("Введите название задачи"); return; }
+    if (!title) {
+        alert("Введите название задачи");
+        return;
+    }
 
-    const newTask = { title, description: description || " ", status: "PENDING" };
+    if (!description) {
+        alert("Введите описание задачи");
+        return;
+    }
+
+    const newTask = { title, description: description, status: "PENDING" };
 
     $.ajax({
         url: `${API_URL}/app/v1/tasks`,
@@ -247,3 +255,6 @@ function logout() {
     localStorage.removeItem("email");
     window.location.href = "login.html";
 }
+window.addEventListener('resize', () => {
+    document.body.style.height = window.innerHeight + 'px';
+});

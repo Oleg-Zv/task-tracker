@@ -7,6 +7,10 @@ $(function () {
     });
 });
 
+window.addEventListener('resize', () => {
+    document.body.style.height = window.innerHeight + 'px';
+});
+
 function login() {
     const email = $("#login-email").val();
     const password = $("#login-password").val();
@@ -27,7 +31,17 @@ function login() {
             window.location.href = "index.html";
         },
         error: function (xhr) {
-            alert("Ошибка авторизации: " + xhr.responseText);
+            const status = xhr.status;
+            let message = "Ошибка авторизации";
+
+            if (status === 401) {
+                message = "❌ Неверный email или пароль";
+            } else if (status === 404) {
+                message = "❌ Пользователь не найден";
+            }
+            alert(message)
         }
+
     });
+
 }

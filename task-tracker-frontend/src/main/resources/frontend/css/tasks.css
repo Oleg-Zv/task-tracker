@@ -1,8 +1,11 @@
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f4f6f8;
+html, body {
+    height: 100%;
+    min-height: 100dvh;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f8;
+    transition: height 0.2s ease;
 }
 
 .header {
@@ -19,6 +22,7 @@ body {
 
 .header-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
 }
 
@@ -31,13 +35,13 @@ body {
     cursor: pointer;
     font-size: 14px;
     min-height: 40px;
-    white-space: nowrap;
 }
 
 .header-btn:hover {
     background: #1d4ed8;
 }
 
+/* ===== Tasks ===== */
 #tasks-container {
     max-width: 700px;
     margin: 20px auto;
@@ -67,18 +71,11 @@ body {
     color: #1f2937;
 }
 
-.toggle-icon {
-    font-size: 16px;
-    color: #6b7280;
-    transition: transform 0.3s ease;
-}
-
 .task-list {
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
 }
-
 
 .task-item {
     display: flex;
@@ -88,21 +85,13 @@ body {
     padding: 16px 14px;
     margin-bottom: 8px;
     border-radius: 8px;
+    border: 1px solid #e5e7eb;
     transition: background 0.2s;
     min-height: 60px;
-    border: 1px solid #e5e7eb;
 }
 
 .task-item:hover {
     background: #e9eef7;
-}
-
-.task-title {
-    flex: 1;
-    color: #111827;
-    font-weight: 500;
-    font-size: 16px;
-    padding-right: 10px;
 }
 
 .task-btn {
@@ -113,8 +102,8 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s;
     min-height: 44px;
+    transition: background-color 0.2s;
 }
 
 .task-btn:hover {
@@ -174,22 +163,12 @@ body {
     overflow-y: auto;
 }
 
-#taskModal .modal-header {
-    border-bottom: 1px solid #d1d5db;
-    padding: 20px 24px;
-}
-
-#taskModal .modal-body {
-    padding: 24px;
-}
-
 #taskModal .modal-body input,
 #taskModal .modal-body textarea {
     background-color: #ffffff;
     border: 1px solid #d1d5db;
     color: #111827;
     border-radius: 8px;
-    transition: all 0.2s;
     padding: 16px 14px;
     font-size: 16px;
     width: 100%;
@@ -197,185 +176,58 @@ body {
     margin-bottom: 16px;
 }
 
-#taskModal .modal-body textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-#taskModal .modal-body input:focus,
-#taskModal .modal-body textarea:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
-}
-
-#taskModal .modal-footer {
-    border-top: 1px solid #d1d5db;
-    padding: 20px 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-#taskModal .modal-footer .btn {
+#status-toast {
+    position: fixed;
+    top: 80px;
+    right: 50%;
+    transform: translateX(50%);
+    padding: 14px 20px;
     border-radius: 8px;
+    color: #fff;
     font-weight: 500;
-    transition: transform 0.1s ease-in-out;
-    padding: 12px 18px;
+    z-index: 9999;
+    display: none;
+    max-width: 90vw;
+    text-align: center;
     font-size: 15px;
-    min-height: 48px;
-    flex: 1;
-    min-width: 120px;
-}
-
-#taskModal .modal-footer .btn:hover {
-    transform: scale(1.02);
-}
-
-.modal.fade .modal-dialog {
-    transition: transform 0.25s ease-out;
-    transform: translateY(-20px);
-}
-.modal.show .modal-dialog {
-    transform: translateY(0);
-}
-
-
-
-@media (max-width: 768px) {
-    #tasks-container {
-        margin: 15px;
-        padding: 16px;
-    }
-
-    .task-item {
-        padding: 14px 12px;
-        min-height: 56px;
-    }
-
-    .header {
-        padding: 10px 12px;
-    }
-
-    .header-btn {
-        padding: 6px 12px;
-        font-size: 13px;
-        min-height: 36px;
-    }
 }
 
 @media (max-width: 480px) {
-    body {
-        padding-bottom: 20px;
-    }
-
-    #tasks-container {
-        margin: 10px;
-        padding: 12px;
-        border-radius: 8px;
-    }
-
     .header {
         flex-direction: column;
         gap: 8px;
-        padding: 12px;
     }
-
     .header-buttons {
         width: 100%;
         justify-content: space-between;
+        flex-wrap: wrap;
     }
-
     .header-btn {
         flex: 1;
-        margin: 0 2px;
         font-size: 12px;
         padding: 8px 6px;
     }
-
+    #tasks-container {
+        margin: 10px;
+        padding: 12px;
+    }
     .task-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
         padding: 16px;
     }
-
-    .task-title {
-        padding-right: 0;
-        font-size: 15px;
-    }
-
-    .task-btn {
-        width: 100%;
-        text-align: center;
-    }
-
     #taskModal .modal-dialog {
         margin: 10px;
         max-width: calc(100vw - 20px);
     }
-
     #taskModal .modal-content {
         max-height: calc(100vh - 20px);
     }
-
-    #taskModal .modal-footer {
-        flex-direction: column;
-    }
-
-    #taskModal .modal-footer .btn {
-        width: 100%;
-        margin: 2px 0;
-    }
 }
 
-@media (max-width: 360px) {
-    #tasks-container {
-        margin: 8px;
-        padding: 10px;
-    }
-
-    .task-item {
-        padding: 14px;
-    }
-
-    .add-task input,
-    .add-task textarea {
-        padding: 12px 10px;
-    }
-
-    .header-btn {
-        font-size: 11px;
-        padding: 6px 4px;
-    }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
+@media (max-height: 500px) {
     #taskModal .modal-content {
         max-height: 80vh;
     }
-
-    #taskModal .modal-body {
-        padding: 16px 20px;
-    }
-
-    .task-item {
-        padding: 12px 14px;
-        min-height: 50px;
-    }
-}
-
-#status-toast {
-    position: fixed;
-    top: 80px !important;
-    right: 50% !important;
-    transform: translateX(50%) !important;
-    padding: 14px 20px !important;
-    border-radius: 8px !important;
-    color: #fff !important;
-    font-weight: 500 !important;
-    z-index: 9999 !important;
-    display: none !important;
-    max-width: 90vw !important;
-    text-align: center !important;
-    font-size: 15px !important;
 }

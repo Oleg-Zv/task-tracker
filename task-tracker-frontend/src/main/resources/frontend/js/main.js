@@ -21,6 +21,9 @@ $(document).ready(function () {
     $("#profile-btn").click(loadProfile);
 });
 
+window.addEventListener('resize', () => {
+    document.body.style.height = window.innerHeight + 'px';
+});
 
 async function loadProfile() {
     try {
