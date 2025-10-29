@@ -1,23 +1,43 @@
-## Task Tracker - Многопользовательский планировщик задач
+## 📝 Task Tracker – Многопользовательский планировщик задач
+<br>
+**Task Tracker** — это современный многопользовательский планировщик задач с микросервисной архитектурой.  
 
-Проект представляет собой многопользовательский планировщик задач с микросервисной архитектурой. Пользователи могут создавать, редактировать и отслеживать свои задачи с ежедневными email-оповещениями.
 
-## 🏗️ Архитектура
+---
+## 📋Функциональность
 
-Проект состоит из следующих сервисов:
+Для пользователей:
 
-- **task-tracker-backend** - основной REST API сервис (Spring Boot)
-- **task-tracker-frontend** - веб-интерфейс (Nginx + статические файлы)  
-- **task-tracker-scheduler** - сервис планировщика для генерации отчетов
-- **task-tracker-email-sender** - сервис отправки email-уведомлений
-- **PostgreSQL** - база данных
-- **Kafka** - брокер сообщений
+- **Регистрация и авторизация**
+- **Создание, редактирование, удаление задач**
+- **Отметка задач как выполненных и обратно**
+- **Приветственное письмо после регистрации**
+- **Ежедневные отчеты о выполненных задачах**
+---
 
-**Особенности архитектуры:**
-- Общение между backend и scheduler осуществляется через gRPC
-- Асинхронная отправка email через Kafka
-- JWT аутентификация
-- Docker-оркестрация
+## 🏗️ Архитектура проекта
+
+Проект состоит из следующих компонентов:
+
+| Сервис | Назначение |
+|--------|------------|
+| **task-tracker-backend** | Основной REST API сервис (Spring Boot) |
+| **task-tracker-frontend** | Веб-интерфейс (Nginx + статические файлы) |
+| **task-tracker-scheduler** | Планировщик задач и генерация отчетов |
+| **task-tracker-email-sender** | Отправка email-уведомлений |
+| **PostgreSQL** | Хранение данных |
+| **Kafka** | Асинхронный обмен сообщениями между сервисами |
+
+---
+
+## ⚙️ Технические особенности
+
+- 🔑 **JWT аутентификация** для безопасного доступа  
+- 🏢 **Микросервисная архитектура** для масштабируемости  
+- ⚡ **Асинхронная обработка** через Kafka  
+- 🔗 **gRPC** для межсервисного взаимодействия  
+- 🐳 **Docker-контейнеризация** для простого деплоя
+
 
 ## 🚀 Локальный запуск
 
@@ -61,44 +81,41 @@ docker stack deploy -c docker-compose.yml "ваше название"
 
 
 ```
+##
 
-## 📋Функциональность
+Вы можете протестировать **Task Tracker** прямо в браузере по следующей ссылке:
 
-Для пользователей
-
-- **Регистрация и авторизация**
-- **Создание, редактирование, удаление задач**
-- **Отметка задач как выполненных и обратно**
-- **Приветственное письмо после регистрации**
-- **Ежедневные отчеты о выполненных задачах**
+[🌐 Перейти к приложению](http://217.114.14.212/login.html)
 
 
-**Технические особенности**
+## 🛠️ Технологический стек
 
-JWT аутентификация
-Микросервисная архитектура
-Асинхронная обработка через Kafka
-gRPC для межсервисного взаимодействия
-Docker-контейнеризация
+### ☕ Backend
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" width="20"/> **Java 21+**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" width="20"/> **Spring Boot 3+**
+- <img src="https://img.icons8.com/ios-filled/50/000000/lock-2.png" width="20"/> **Spring Security / JWT (RSA-ключи)**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hibernate/hibernate-original.svg" width="20"/> **Spring Data JPA / Hibernate**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg" width="20"/> **Spring Kafka**
+- ⚡ **gRPC (backend ↔ scheduler)**
+- 📜 **Liquibase**
+- 🧪 **Testcontainers**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" width="20"/> **PostgreSQL**
 
-## 🛠️Tехнологический стек
+### 💻 Frontend
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="20"/> **HTML5 / CSS3 / JS (ES6+)**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jquery/jquery-original.svg" width="20"/> **jQuery + AJAX**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-plain.svg" width="20"/> **Bootstrap 5**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" width="20"/> **Nginx**
 
-Backend
+### ☁️ Инфраструктура
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="20"/> **Docker / Docker Compose**
+- <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="20"/> **Docker Swarm**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg" width="20"/> **Kafka (message broker)**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" width="20"/> **PostgreSQL**
+- <img src="https://img.icons8.com/ios-filled/50/000000/github.png" width="20"/> **GitHub Actions (CI/CD)**
+- <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="20"/> **Docker Hub**
+- <img src="https://img.icons8.com/color/48/000000/email.png" width="20"/> **Mailjet (SMTP-сервис)**
 
-Java 17+, Spring Boot 3+
-Spring Security, Spring Data JPA, Spring Kafka
-PostgreSQL, Hibernate
-JWT, gRPC
-Frontend
-
-HTML5, CSS3, JavaScript
-jQuery, Bootstrap
-Nginx
-Инфраструктура
-
-Docker, Docker Compose, Docker Swarm
-Kafka, PostgreSQL
-GitHub Actions (CI/CD)
 
 ## 🤝 Контакты
 **Oleg Zhvavyy**
