@@ -77,6 +77,8 @@ echo "your_mailjet_api_key" | docker secret create api_key -
 echo "your_mailjet_secret_key" | docker secret create secret_key -
 
 4. Запуск приложения
+Также сменить версии образов, на latest в compose
+
 docker stack deploy -c docker-compose.yml "ваше название"
 
 
