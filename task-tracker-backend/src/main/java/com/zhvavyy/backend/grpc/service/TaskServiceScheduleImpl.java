@@ -22,7 +22,7 @@ public class TaskServiceScheduleImpl extends TaskServiceScheduleGrpc.TaskService
 
     @Override
     public void findAllByUserId(TaskServiceScheduleProto.SchedulerTasksRequest request, StreamObserver<TaskServiceScheduleProto.TaskResponse> responseObserver) {
-        Long userId = UserInterceptor.USER_ID_CTX_KEY.get(); // достаём из Metadata
+        Long userId = UserInterceptor.USER_ID_CTX_KEY.get();
         TaskResponse response = taskService.findAllByUserId(userId);
 
         TaskServiceScheduleProto.TaskResponse.Builder builder = TaskServiceScheduleProto.TaskResponse.newBuilder();

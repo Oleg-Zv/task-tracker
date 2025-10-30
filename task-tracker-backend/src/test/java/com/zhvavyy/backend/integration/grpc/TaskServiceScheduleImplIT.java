@@ -9,7 +9,9 @@ import com.zhvavyy.backend.model.enums.Role;
 import com.zhvavyy.backend.model.enums.Status;
 import com.zhvavyy.backend.repository.TaskRepository;
 import com.zhvavyy.backend.repository.UserRepository;
+import io.grpc.Metadata;
 import io.grpc.inprocess.InProcessChannelBuilder;
+import io.grpc.stub.MetadataUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,12 +92,20 @@ public class TaskServiceScheduleImplIT extends BaseIntegrationTest {
                 .doneAt(now)
                 .build());
 
+        // Создаем заголовки с user-id
+        Metadata headers = new Metadata();
+        headers.put(Metadata.Key.of("user-id", Metadata.ASCII_STRING_MARSHALLER),
+                String.valueOf(existingUser.getId()));
+
         TaskServiceScheduleProto.SchedulerTasksRequest request =
                 TaskServiceScheduleProto.SchedulerTasksRequest.newBuilder()
-                        .setId(existingUser.getId())
+                        .setId(existingUser.getId()) // это поле сейчас не используется сервисом!
                         .build();
 
-        TaskServiceScheduleProto.TaskResponse response = stub.findAllByUserId(request);
+        // Вызываем с заголовками
+        TaskServiceScheduleProto.TaskResponse response = stub
+                .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(headers))
+                .findAllByUserId(request);
 
         assertAll(
                 () -> assertNotNull(response),
@@ -103,7 +113,6 @@ public class TaskServiceScheduleImplIT extends BaseIntegrationTest {
                 () -> assertEquals(TEST_TITLE, response.getTasks(0).getTitle())
         );
     }
-
     @AfterEach
     public void cleanUp() {
         taskRepository.deleteAll();

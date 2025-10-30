@@ -62,10 +62,26 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponse findAllByUserId(Long userId) {
+        if (userId == null) {
+            return new TaskResponse(List.of());
+        }
+
         List<TaskDto> tasks = taskRepository.findAllByUserId(userId)
                 .stream().map(task -> new TaskDto(task.getId(), task.getUser().getEmail(), task.getTitle(), task.getStatus()))
                 .toList();
         return new TaskResponse(tasks);
+    }
+
+    @Override
+    public Page<TaskReadDto> findAllByUserId(Long userId, Pageable pageable) {
+        return taskRepository.findByUserId(userId, pageable)
+                .map(taskMapper::mapTo);
+    }
+
+    @Override
+    public Page<TaskReadDto> findAllByUserIdAndStatus(Long userId, Status status, Pageable pageable) {
+        return taskRepository.findByUserIdAndStatus(userId, status, pageable)
+                .map(taskMapper::mapTo);
     }
 
     @Override

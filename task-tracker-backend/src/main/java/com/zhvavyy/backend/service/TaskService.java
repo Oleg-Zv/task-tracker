@@ -20,4 +20,8 @@ public interface TaskService {
     TaskReadDto markAsDone(Long id,CustomUserDetails userDetails);
     TaskReadDto markAsPending(Long id,CustomUserDetails userDetails);
     TaskReadDto changeTask(Long id, TaskUpdate update);
+
+    Page<TaskReadDto> findAllByUserId(Long userId, Pageable pageable);
+    Page<TaskReadDto> findAllByUserIdAndStatus(Long userId, Status status, Pageable pageable);
+
 }

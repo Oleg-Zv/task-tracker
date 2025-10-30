@@ -33,11 +33,14 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<Page<TaskReadDto>> getTasks(@RequestParam(required = false) Status status,
-                                                              Pageable pageable){
-        if(status!=null) {
-            return ResponseEntity.ok(taskService.findAllByStatus(status, pageable));
+                                                      Pageable pageable,
+                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getUser().getId();
+
+        if(status != null) {
+            return ResponseEntity.ok(taskService.findAllByUserIdAndStatus(userId, status, pageable));
         }
-        return ResponseEntity.ok(taskService.getAll(pageable));
+        return ResponseEntity.ok(taskService.findAllByUserId(userId, pageable));
     }
 
     @PostMapping

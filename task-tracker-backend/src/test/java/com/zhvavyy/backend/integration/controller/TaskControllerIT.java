@@ -70,13 +70,14 @@ public class TaskControllerIT extends BaseIntegrationTest {
                 new TaskReadDto(1L, TEST_TITLE, Status.PENDING, TEST_EMAIL, Instant.now(), Instant.now())
         ));
 
-        when(taskService.findAllByStatus(Status.PENDING, PageRequest.of(0, 10)))
+        when(taskService.findAllByUserIdAndStatus(1L, Status.PENDING, PageRequest.of(0, 10)))
                 .thenReturn(mockPage);
 
         mockMvc.perform(get(BASE_URL)
                         .param("status", "PENDING")
                         .param("page", "0")
-                        .param("size", "10"))
+                        .param("size", "10")
+                        .with(user(customUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content[0].title").value(TEST_TITLE))
@@ -92,11 +93,12 @@ public class TaskControllerIT extends BaseIntegrationTest {
                 new TaskReadDto(1L, TEST_TITLE, Status.PENDING, TEST_EMAIL, Instant.now(), Instant.now())
         ));
 
-        when(taskService.getAll(PageRequest.of(0, 10))).thenReturn(mockPage);
+        when(taskService.findAllByUserId(1L, PageRequest.of(0, 10))).thenReturn(mockPage);
 
         mockMvc.perform(get(BASE_URL)
                         .param("page", "0")
-                        .param("size", "10"))
+                        .param("size", "10")
+                        .with(user(customUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -109,11 +111,13 @@ public class TaskControllerIT extends BaseIntegrationTest {
     void shouldReturnEmptyList_whenNoTasksExist() throws Exception {
         Page<TaskReadDto> emptyPage = new PageImpl<>(List.of());
 
-        when(taskService.getAll(any(PageRequest.class))).thenReturn(emptyPage);
+        when(taskService.findAllByUserId(1L, PageRequest.of(0, 10)))
+                .thenReturn(emptyPage);
 
         mockMvc.perform(get(BASE_URL)
                         .param("page", "0")
-                        .param("size", "10"))
+                        .param("size", "10")
+                        .with(user(customUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(0));
