@@ -7,6 +7,7 @@ import com.zhvavyy.backend.grpc.TaskServiceScheduleGrpc;
 import com.zhvavyy.backend.grpc.TaskServiceScheduleProto;
 
 import com.zhvavyy.backend.grpc.mapper.TaskGrpcMapper;
+import com.zhvavyy.backend.grpc.service.interceptor.UserInterceptor;
 import com.zhvavyy.backend.service.TaskService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,15 @@ public class TaskServiceScheduleImpl extends TaskServiceScheduleGrpc.TaskService
 
     @Override
     public void findAllByUserId(TaskServiceScheduleProto.SchedulerTasksRequest request, StreamObserver<TaskServiceScheduleProto.TaskResponse> responseObserver) {
-        TaskResponse allByUserId = taskService.findAllByUserId(request.getId());
+        Long userId = UserInterceptor.USER_ID_CTX_KEY.get(); // достаём из Metadata
+        TaskResponse response = taskService.findAllByUserId(userId);
 
-        TaskServiceScheduleProto.TaskResponse.Builder response = TaskServiceScheduleProto.TaskResponse.newBuilder();
+        TaskServiceScheduleProto.TaskResponse.Builder builder = TaskServiceScheduleProto.TaskResponse.newBuilder();
 
-        for (TaskDto task : allByUserId.tasks()) {
-            response.addTasks(TaskGrpcMapper.toProto(task));
+        for (TaskDto task : response.tasks()) {
+            builder.addTasks(TaskGrpcMapper.toProto(task));
         }
-        responseObserver.onNext(response.build());
+        responseObserver.onNext(builder.build());
         responseObserver.onCompleted();
     }
 }
