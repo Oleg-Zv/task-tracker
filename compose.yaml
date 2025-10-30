@@ -36,7 +36,7 @@ services:
 
 
   task-tracker-backend:
-    image: olegzv13/backend:4.7.4.RELEASE
+    image: olegzv13/backend:4.7.7.RELEASE
     ports:
       - "8080:8080"
     depends_on:
@@ -55,7 +55,7 @@ services:
 
 
   task-tracker-scheduler:
-    image: olegzv13/scheduler:1.7.2.RELEASE
+    image: olegzv13/scheduler:1.7.4.RELEASE
     depends_on:
       - kafka
       - task-tracker-backend
@@ -64,7 +64,7 @@ services:
 
 
   task-tracker-frontend:
-    image: olegzv13/frontend:4.0.RELEASE
+    image: olegzv13/frontend:4.0.4.RELEASE
     ports:
       - "80:80"
     depends_on:
