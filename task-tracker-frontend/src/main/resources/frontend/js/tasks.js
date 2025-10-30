@@ -37,7 +37,6 @@ $(document).ready(function () {
         $(this).toggleClass("bi-caret-down-fill bi-caret-up-fill");
     });
 
-
     $("#done-tasks, #pending-tasks").collapse('hide');
 
     loadTasks();
@@ -78,17 +77,11 @@ function renderTasks(tasks) {
 function addTask() {
     const title = $("#new-task-title").val().trim();
     const description = $("#new-task-desc").val().trim();
-    if (!title) {
-        alert("Введите название задачи");
-        return;
-    }
 
-    if (!description) {
-        alert("Введите описание задачи");
-        return;
-    }
+    if (!title) { showStatusToast("Введите название задачи", false); return; }
+    if (!description) { showStatusToast("Введите описание задачи", false); return; }
 
-    const newTask = { title, description: description, status: "PENDING" };
+    const newTask = { title, description, status: "PENDING" };
 
     $.ajax({
         url: `${API_URL}/app/v1/tasks`,
@@ -111,7 +104,7 @@ function addTask() {
             showStatusToast("Задача добавлена!", true);
         },
         error: function (xhr) {
-            alert("Ошибка при добавлении задачи: " + xhr.responseText);
+            showStatusToast("Ошибка при добавлении задачи: " + xhr.responseText, false);
         }
     });
 }
@@ -119,7 +112,7 @@ function addTask() {
 function openTaskModal(task) {
     currentTaskId = task.id;
     currentTaskStatus = task.status;
-    originalTitle = task.title;
+    originalTitle = task.title || "";
     originalDesc = task.description || "";
 
     $("#modal-task-title").val(originalTitle).prop("readonly", true);
@@ -142,9 +135,10 @@ function saveTaskChanges() {
     if (!currentTaskId) return;
 
     const title = $("#modal-task-title").val().trim();
-    const desc = $("#modal-task-desc").val().trim() || " ";
+    const desc = $("#modal-task-desc").val().trim();
 
     if (!title) { showStatusToast("Название не может быть пустым!", false); return; }
+    if (!desc) { showStatusToast("Описание не может быть пустым!", false); return; }
 
     $.ajax({
         url: `${API_URL}/app/v1/tasks/${currentTaskId}`,
@@ -152,7 +146,7 @@ function saveTaskChanges() {
         headers: { Authorization: "Bearer " + token },
         contentType: "application/json",
         data: JSON.stringify({ title, description: desc }),
-        success: function (updatedTask) {
+        success: function () {
             showStatusToast("Задача изменена!", true);
             loadTasks();
             taskModal.hide();
@@ -173,6 +167,7 @@ function cancelEditing() {
 
 function toggleTaskDone(done) {
     if (!currentTaskId) return;
+
     const url = done
         ? `${API_URL}/app/v1/tasks/${currentTaskId}/done`
         : `${API_URL}/app/v1/tasks/${currentTaskId}/pending`;
@@ -192,7 +187,9 @@ function toggleTaskDone(done) {
                 resetModalState();
             }, 800);
         },
-        error: function (xhr) { showStatusToast("Ошибка при изменении статуса: " + xhr.responseText, false); }
+        error: function (xhr) {
+            showStatusToast("Ошибка при изменении статуса: " + xhr.responseText, false);
+        }
     });
 }
 
@@ -219,7 +216,9 @@ function deleteTask(id) {
             resetModalState();
             showStatusToast("Задача удалена!", true);
         },
-        error: function () { showStatusToast("Ошибка при удалении задачи!", false); }
+        error: function () {
+            showStatusToast("Ошибка при удалении задачи!", false);
+        }
     });
 }
 
@@ -255,6 +254,7 @@ function logout() {
     localStorage.removeItem("email");
     window.location.href = "login.html";
 }
+
 window.addEventListener('resize', () => {
     document.body.style.height = window.innerHeight + 'px';
 });

@@ -1,5 +1,4 @@
 const API_URL = "http://217.114.14.212:8080";
-
 $(function () {
     $("#register-btn").click(function (e) {
         e.preventDefault();
